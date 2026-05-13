@@ -1,7 +1,8 @@
 import { supabase } from "@/lib/supabase/client"
 import { notFound } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { IndicatorChart } from "@/components/indicators/IndicatorChart"
 
 export const revalidate = 3600
 
@@ -24,11 +25,6 @@ const pts = (points as unknown as Row[])
 const name = pts[0].indicator_name
 const unit = pts[0].unit
 const sorted = [...pts].reverse()
-const values = sorted.map((p) => p.value)
-const min = Math.min(...values)
-const max = Math.max(...values)
-const range = max - min || 1
-
   const latest = sorted[sorted.length - 1]
   const prev = sorted[sorted.length - 2]
   const change = prev ? ((latest.value - prev.value) / prev.value * 100) : 0
@@ -61,30 +57,10 @@ const range = max - min || 1
         </CardContent></Card>
       </div>
 
-      {/* Bar chart (CSS-based, no library) */}
-      <Card className="mb-6">
-        <CardHeader><CardTitle className="text-lg">Evolución</CardTitle></CardHeader>
-        <CardContent>
-          <div className="space-y-0.5 max-h-[400px] overflow-y-auto">
-            {sorted.slice(-60).map((p, i) => {
-              const pct = ((p.value - min) / range) * 100
-              const isLatest = i === sorted.length - 1
-              return (
-                <div key={i} className="flex items-center gap-2 text-[10px] sm:text-xs">
-                  <span className="w-14 sm:w-16 text-right text-muted-foreground shrink-0">{p.period}</span>
-                  <div className="flex-1 h-5 relative">
-                    <div
-                      className={`absolute inset-y-1 rounded-sm ${isLatest ? "bg-foreground" : "bg-muted-foreground/20"}`}
-                      style={{ width: `${Math.max(pct, 1)}%` }}
-                    />
-                  </div>
-                  <span className="w-14 sm:w-16 text-right font-medium shrink-0">{p.value.toFixed(1)}</span>
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      <IndicatorChart
+        data={sorted.map((point) => ({ period: point.period, value: point.value }))}
+        unit={unit}
+      />
 
       {/* Data table */}
       <details className="text-sm">
@@ -102,7 +78,7 @@ const range = max - min || 1
                 </tr>
               </thead>
               <tbody>
-                {sorted.reverse().map((p, i) => (
+                {[...sorted].reverse().map((p, i) => (
                   <tr key={i} className="border-b border-muted/30">
                     <td className="p-2">{p.period}</td>
                     <td className="text-right p-2 font-medium">{p.value.toFixed(1)}</td>
