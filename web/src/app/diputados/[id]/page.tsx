@@ -19,7 +19,6 @@ export default async function PoliticianPage({ params }: PageProps) {
     .from("politicians")
     .select(`*, politician_memberships(*, party:parties(*), legislature:legislatures(*)), economic_declarations(*)`)
     .eq("id", id).single()
-
   if (!pol) notFound()
 
   const { data: votes } = await supabase
@@ -31,8 +30,24 @@ export default async function PoliticianPage({ params }: PageProps) {
 
   const { count: totalVotes } = await supabase
     .from("votes")
-    .select("*", { count: "exact", head: true })
-    .eq("politician_id", id)
+    .select("*", { count: "exact", head: true }).eq("politician_id", id)
 
-  return <PoliticianProfile politician={pol as Record<string, unknown>} votes={(votes || []) as Record<string, unknown>[]} totalVotes={totalVotes} />
+  const { data: powerRels } = await supabase
+    .from("power_relationships")
+    .select("*, superior:superior_id(full_name), party:parties(acronym, color)")
+    .eq("person_id", id)
+
+  const { data: revolvingDoors } = await supabase
+    .from("revolving_door")
+    .select("*").eq("person_id", id)
+
+  return (
+    <PoliticianProfile
+      pol={pol as Record<string, unknown>}
+      votes={(votes || []) as Record<string, unknown>[]}
+      totalVotes={totalVotes}
+      powerRels={(powerRels || []) as Record<string, unknown>[]}
+      revolvingDoors={(revolvingDoors || []) as Record<string, unknown>[]}
+    />
+  )
 }
