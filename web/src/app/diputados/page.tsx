@@ -11,7 +11,7 @@ export default async function DiputadosPage() {
     .order("full_name")
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Diputados</h1>
         <p className="text-muted-foreground mt-1">

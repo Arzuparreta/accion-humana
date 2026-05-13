@@ -70,10 +70,10 @@ export default async function PuertasGiratoriasPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {entries.map((e, i) => (
-              <div key={i} className="flex items-start gap-3 text-sm border-l-2 border-muted pl-3 py-1">
+              <div key={i} className="flex items-start gap-2 text-xs sm:text-sm border-l-2 border-muted pl-2 sm:pl-3 py-1">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium">{e.person_name}</span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="font-medium truncate">{e.person_name}</span>
                     {e.political_party && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded font-medium"
                         style={{

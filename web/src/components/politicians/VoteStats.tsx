@@ -29,7 +29,7 @@ export async function VoteStats({ politicianId }: VoteStatsProps) {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {sorted.map(([vote, count]) => {
           const pct = Math.round((count / total) * 100)
           const color = VOTE_COLORS[vote] || "#9ca3af"

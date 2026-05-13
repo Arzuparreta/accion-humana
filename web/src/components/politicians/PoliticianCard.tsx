@@ -15,9 +15,9 @@ export function PoliticianCard({ politician }: PoliticianCardProps) {
     <Link href={`/diputados/${politician.id}`}>
       <Card className="hover:border-primary/30 transition-all hover:shadow-sm cursor-pointer h-full">
         <CardHeader>
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <CardTitle className="text-base">{politician.full_name}</CardTitle>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <CardTitle className="text-sm sm:text-base truncate">{politician.full_name}</CardTitle>
               {membership?.constituency && (
                 <CardDescription>{membership.constituency}</CardDescription>
               )}

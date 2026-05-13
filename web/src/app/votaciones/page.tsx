@@ -37,7 +37,7 @@ export default async function VotacionesPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Votaciones</h1>
         <p className="text-muted-foreground mt-1">
@@ -56,21 +56,21 @@ export default async function VotacionesPage() {
           return (
             <Link key={s.id} href={`/votaciones/${s.id}`}>
               <Card className="hover:border-primary/30 transition-all cursor-pointer">
-                <CardContent className="py-4 flex items-start justify-between gap-4">
+                <CardContent className="py-3 sm:py-4 flex items-start justify-between gap-2 sm:gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium text-sm">{s.title}</div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-muted-foreground">
+                    <div className="font-medium text-sm truncate">{s.title}</div>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span className="text-xs text-muted-foreground shrink-0">
                         Sesión {s.session_number} · {dateStr}
                       </span>
-                      <Badge variant="outline" className="text-[10px] h-4">
+                      <Badge variant="outline" className="text-[10px] h-4 shrink-0">
                         {s.votes?.[0]?.count || 0} votos
                       </Badge>
                     </div>
                   </div>
                   {divCount > 0 && (
                     <Badge className="text-[10px] h-5 shrink-0 bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 border-orange-300 dark:border-orange-700">
-                      ⚠️ {divCount} divergencias
+                      ⚠️ {divCount}
                     </Badge>
                   )}
                 </CardContent>

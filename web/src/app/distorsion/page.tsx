@@ -61,26 +61,26 @@ export default function DistorsionElectoralPage() {
         <CardContent className="space-y-3">
           {withVps.map((r) => {
             return (
-              <div key={r.party} className="flex items-center gap-3 text-sm">
-                <div className="w-16 text-right font-medium shrink-0" style={{ color: r.color }}>
+              <div key={r.party} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                <div className="w-10 sm:w-16 text-right font-medium shrink-0" style={{ color: r.color }}>
                   {r.party}
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <div
-                      className="h-6 rounded"
+                      className="h-5 sm:h-6 rounded"
                       style={{
                         width: `${Math.max((r.votesPerSeat / maxVps) * 100, 4)}%`,
                         backgroundColor: r.color + "30",
                         borderLeft: `3px solid ${r.color}`,
                       }}
                     />
-                    <span className="text-xs shrink-0 w-16 text-right tabular-nums">
-                      {r.votesPerSeat.toLocaleString()} votos/esc.
+                    <span className="text-[10px] sm:text-xs shrink-0 sm:w-16 text-right tabular-nums">
+                      {r.votesPerSeat.toLocaleString()}
                     </span>
                   </div>
                 </div>
-                <span className="text-xs text-muted-foreground shrink-0 w-12 text-right">
+                <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0 w-8 sm:w-12 text-right">
                   {r.seats} esc.
                 </span>
               </div>
@@ -109,12 +109,12 @@ export default function DistorsionElectoralPage() {
             const isOver = diff > 1
             const isUnder = diff < -0.5
             return (
-              <div key={r.party} className="flex items-center gap-2 text-sm">
-                <span className="w-12 text-right font-medium" style={{ color: r.color }}>{r.party}</span>
-                <span className="text-xs w-12 text-right">{r.pctVote.toFixed(1)}% votos</span>
-                <span className="text-xs">→</span>
-                <span className="text-xs w-12 font-medium">{(r.seats / 350 * 100).toFixed(1)}% esc.</span>
-                <span className={`text-xs ml-2 ${isOver ? 'text-green-600' : isUnder ? 'text-red-600' : 'text-muted-foreground'}`}>
+              <div key={r.party} className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm flex-wrap">
+                <span className="w-10 sm:w-12 text-right font-medium" style={{ color: r.color }}>{r.party}</span>
+                <span className="w-14 sm:w-16 text-right">{r.pctVote.toFixed(1)}% votos</span>
+                <span className="text-[10px]">→</span>
+                <span className="w-14 sm:w-16 font-medium">{(r.seats / 350 * 100).toFixed(1)}% esc.</span>
+                <span className={`text-[10px] sm:text-xs ml-1 ${isOver ? 'text-green-600' : isUnder ? 'text-red-600' : 'text-muted-foreground'}`}>
                   {diff > 0 ? '+' : ''}{diff.toFixed(1)}%
                 </span>
               </div>

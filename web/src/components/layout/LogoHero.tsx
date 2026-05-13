@@ -12,8 +12,8 @@ export function LogoHero() {
         priority
       />
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Acción Humana</h1>
-        <p className="text-muted-foreground text-lg max-w-lg">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Acción Humana</h1>
+        <p className="text-muted-foreground text-base sm:text-lg max-w-lg px-2">
           &ldquo;El Estado no existe fuera de las personas que lo conforman.&rdquo;
         </p>
       </div>

@@ -23,7 +23,7 @@ export default async function HomePage() {
     .order("acronym")
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 sm:space-y-12">
       <LogoHero />
 
       <section className="text-center space-y-4">

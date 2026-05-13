@@ -73,8 +73,11 @@ export default async function VotacionPage({ params }: PageProps) {
       <div className="space-y-2">
         {sorted.map(([acr, g]) => (
           <Card key={acr}>
-            <CardContent className="py-3 flex items-center gap-4">
-              <div className="w-20 shrink-0 text-right"><span className="text-sm font-bold" style={{ color: g.color }}>{acr}</span></div>
+            <CardContent className="py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+              <div className="flex items-center justify-between sm:w-20 sm:shrink-0 sm:text-right sm:block">
+                <span className="text-sm font-bold" style={{ color: g.color }}>{acr}</span>
+                <span className="text-xs text-muted-foreground sm:hidden">{g.total} votos</span>
+              </div>
               <div className="flex-1">
                 <div className="flex h-5 rounded-full overflow-hidden bg-muted">
                   {Object.entries(g.votes).sort((a, b) => b[1] - a[1]).map(([vote, count]) => (
@@ -82,7 +85,7 @@ export default async function VotacionPage({ params }: PageProps) {
                   ))}
                 </div>
               </div>
-              <div className="flex gap-2 text-xs shrink-0">
+              <div className="flex gap-2 text-xs shrink-0 hidden sm:flex">
                 {Object.entries(g.votes).sort((a, b) => b[1] - a[1]).map(([vote, count]) => (
                   <span key={vote} className="flex items-center gap-1"><span className="w-2 h-2 rounded-full" style={{ backgroundColor: VC[vote] }} />{count}</span>
                 ))}

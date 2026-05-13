@@ -50,7 +50,7 @@ export function SearchBox() {
           setOpen(true)
         }}
         onFocus={() => setOpen(true)}
-        className="h-12 text-lg"
+        className="h-12 text-base sm:text-lg"
       />
       {open && results.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border rounded-lg shadow-lg z-50 overflow-hidden">
