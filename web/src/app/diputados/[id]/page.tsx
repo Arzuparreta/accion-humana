@@ -21,11 +21,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params
-  const { data } = await supabase
-    .from("politicians")
-    .select("full_name")
-    .eq("id", id)
-    .single()
+  const { data } = await supabase.from("politicians").select("full_name").eq("id", id).single()
   return { title: data?.full_name || "Diputado" }
 }
 
@@ -34,11 +30,7 @@ export default async function PoliticianPage({ params }: PageProps) {
 
   const { data: pol } = await supabase
     .from("politicians")
-    .select(
-      `*,
-      politician_memberships(*, party:parties(*), legislature:legislatures(*)),
-      economic_declarations(*)`
-    )
+    .select(`*, politician_memberships(*, party:parties(*), legislature:legislatures(*)), economic_declarations(*)`)
     .eq("id", id)
     .single()
 
@@ -52,10 +44,7 @@ export default async function PoliticianPage({ params }: PageProps) {
     .from("votes")
     .select("vote, voting_sessions!inner(date, title, initiative_number)")
     .eq("politician_id", id)
-    .order("date", {
-      ascending: false,
-      foreignTable: "voting_sessions",
-    })
+    .order("date", { ascending: false, foreignTable: "voting_sessions" })
     .limit(50)
 
   const { count: totalVotes } = await supabase
@@ -65,42 +54,27 @@ export default async function PoliticianPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
+      {/* Header: name + party + vote count */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {pol.full_name}
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight">{pol.full_name}</h1>
           {currentMembership && (
             <div className="flex flex-wrap items-center gap-2 mt-2">
               {currentMembership.party && (
                 <Badge
-                  style={{
-                    backgroundColor: currentMembership.party.color + "20",
-                    color: currentMembership.party.color,
-                    borderColor: currentMembership.party.color,
-                  }}
-                  variant="outline"
-                  className="font-semibold"
-                >
-                  {currentMembership.party.acronym}
-                </Badge>
+                  style={{ backgroundColor: currentMembership.party.color + "20", color: currentMembership.party.color, borderColor: currentMembership.party.color }}
+                  variant="outline" className="font-semibold"
+                >{currentMembership.party.acronym}</Badge>
               )}
-              <span className="text-muted-foreground">
-                {currentMembership.constituency} ·{" "}
-                {currentMembership.group_parliamentary}
-              </span>
+              <span className="text-muted-foreground">{currentMembership.constituency} · {currentMembership.group_parliamentary}</span>
             </div>
           )}
         </div>
         {totalVotes !== null && (
           <Card className="w-fit shrink-0">
             <CardContent className="py-3 px-4">
-              <div className="text-2xl font-bold text-center">
-                {totalVotes}
-              </div>
-              <div className="text-xs text-muted-foreground text-center">
-                votos registrados
-              </div>
+              <div className="text-2xl font-bold text-center">{totalVotes}</div>
+              <div className="text-xs text-muted-foreground text-center">votos registrados</div>
             </CardContent>
           </Card>
         )}
@@ -108,59 +82,44 @@ export default async function PoliticianPage({ params }: PageProps) {
 
       <VoteStats politicianId={id} />
 
-      <Tabs defaultValue="power" className="w-full">
-        <TabsList className="inline-flex h-9 items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground w-auto">
-          <TabsTrigger value="power" className="px-3 py-1 text-sm">Cadena de mando</TabsTrigger>
-          <TabsTrigger value="votes" className="px-3 py-1 text-sm">
-            Votos
-            {totalVotes && totalVotes > 0 && (
-              <span className="ml-1 text-xs text-muted-foreground">
-                ({totalVotes})
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="info" className="px-3 py-1 text-sm">Trayectoria</TabsTrigger>
+      <Tabs defaultValue="power">
+        <TabsList>
+          <TabsTrigger value="power">Cadena de mando</TabsTrigger>
+          <TabsTrigger value="votes">Votos{totalVotes && totalVotes > 0 ? ` (${totalVotes})` : ""}</TabsTrigger>
+          <TabsTrigger value="info">Trayectoria</TabsTrigger>
           {pol.economic_declarations?.length > 0 && (
-            <TabsTrigger value="declarations" className="px-3 py-1 text-sm">
-              Declaraciones
-            </TabsTrigger>
+            <TabsTrigger value="declarations">Declaraciones</TabsTrigger>
           )}
-          <TabsTrigger value="annotations" className="px-3 py-1 text-sm">Anotaciones</TabsTrigger>
+          <TabsTrigger value="annotations">Anotaciones</TabsTrigger>
         </TabsList>
 
-        <div className="min-h-[350px] mt-3">
-        <TabsContent value="power" className="space-y-4 mt-0">
-          <PowerChain politicianId={id} />
-          <RevolvingDoorList politicianId={id} />
-        </TabsContent>
-
-        <TabsContent value="votes" className="mt-0">
-          <VotingHistory votes={(votes as unknown as Vote[]) || []} politicianId={id} />
-        </TabsContent>
-
-        <TabsContent value="info" className="space-y-4 mt-0">
-          <PoliticianTimeline memberships={(pol.politician_memberships as PoliticianMembership[]) || []} />
-          {pol.raw_data?.biografia && (
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="text-lg font-semibold mb-2">Biografía</h3>
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                  {String(pol.raw_data.biografia)}
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        <TabsContent value="declarations" className="mt-0">
-          {(pol.economic_declarations as EconomicDeclaration[])?.map((d) => (
-            <EconomicDeclarationView key={d.id} declaration={d} />
-          ))}
-        </TabsContent>
-
-        <TabsContent value="annotations" className="mt-0">
-          <AnnotationPanel entityType="politician" entityId={id} />
-        </TabsContent>
+        <div className="min-h-[400px]">
+          <TabsContent value="power" className="space-y-4">
+            <PowerChain politicianId={id} />
+            <RevolvingDoorList politicianId={id} />
+          </TabsContent>
+          <TabsContent value="votes">
+            <VotingHistory votes={(votes as unknown as Vote[]) || []} politicianId={id} />
+          </TabsContent>
+          <TabsContent value="info" className="space-y-4">
+            <PoliticianTimeline memberships={(pol.politician_memberships as PoliticianMembership[]) || []} />
+            {pol.raw_data?.biografia && (
+              <Card>
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold mb-2">Biografía</h3>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{String(pol.raw_data.biografia)}</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+          <TabsContent value="declarations">
+            {(pol.economic_declarations as EconomicDeclaration[])?.map((d) => (
+              <EconomicDeclarationView key={d.id} declaration={d} />
+            ))}
+          </TabsContent>
+          <TabsContent value="annotations">
+            <AnnotationPanel entityType="politician" entityId={id} />
+          </TabsContent>
         </div>
       </Tabs>
     </div>

@@ -21,6 +21,9 @@ export function Header() {
           <Link href="/diputados" className="hover:text-foreground transition-colors">
             Diputados
           </Link>
+          <Link href="/votaciones" className="hover:text-foreground transition-colors">
+            Votaciones
+          </Link>
           <Link href="/partidos" className="hover:text-foreground transition-colors">
             Partidos
           </Link>
