@@ -4,48 +4,32 @@
 
 **Acción Humana** es una máquina de transparencia radical sobre la política española. Traduce datos públicos al lenguaje del ciudadano sin filtros ideológicos.
 
+🌐 **[web-pi-two-62.vercel.app](https://web-pi-two-62.vercel.app)**
+
+## 📦 Qué hay ahora
+
+- **350 diputados** activos de la XV Legislatura con partido, circunscripción y biografía
+- **4.200 votos individuales** enlazados a cada diputado (sesión del 30 abril 2026)
+- **Cadena de mando**: quién controla a quién dentro de cada partido
+- **Puertas giratorias**: 20 casos documentados de políticos en la empresa privada
+- **Distorsión electoral**: D'Hondt, votos por escaño, umbral provincial
+- **Divergencias**: detección automática de votos contra el grupo parlamentario
+- **Anotaciones**: sistema propio para que la comunidad añada contexto
+
 ## 🚀 Arranque rápido
-
-### Requisitos
-- Node.js 22+
-- Python 3.12+
-- PostgreSQL (o acceso a Supabase)
-
-### Desarrollo local
 
 ```bash
 # Frontend
-cd web
-npm install
-cp .env.local.example .env.local  # Configurar claves de Supabase
-npm run dev
+cd web && npm install && npm run dev
 
 # ETL (scrapers)
-cd etl
-pip install -r requirements.txt
+cd etl && pip install -r requirements.txt
 PYTHONPATH=src python -m src.congreso.diputados
 ```
 
-### Estructura
+## 📖 Para agentes AI
 
-```
-accion-humana/
-├── web/                          # Next.js 14 (App Router) + Tailwind + shadcn/ui
-│   └── src/
-│       ├── app/                  # Páginas (/, /diputados/[id], /partidos)
-│       ├── components/           # UI (shadcn) + dominio
-│       ├── lib/supabase/         # Clientes de BD
-│       └── types/                # Tipos compartidos
-├── etl/                          # Scrapers Python
-│   └── src/
-│       ├── common/               # DB client, normalización de nombres
-│       ├── congreso/             # Diputados, votaciones, iniciativas
-│       ├── contratacion/         # (próximamente)
-│       ├── presupuestos/         # (próximamente)
-│       └── ine/                  # (próximamente)
-├── supabase/                     # Migraciones SQL
-└── .github/workflows/            # CI/CD
-```
+Lee **[AGENTS.md](AGENTS.md)** antes de tocar código. Contiene la visión, los principios y lo que NO hacer. El plan completo está en **[PLAN.md](PLAN.md)**.
 
 ## 📊 Fuentes de datos
 
@@ -58,16 +42,11 @@ accion-humana/
 
 ## 🤝 Contribuir
 
-1. Revisa los [issues](https://github.com/Arzuparreta/accion-humana/issues)
-2. Elige uno etiquetado `good first issue`
+1. Lee `AGENTS.md` — es obligatorio
+2. Revisa los [issues](https://github.com/Arzuparreta/accion-humana/issues)
 3. Haz fork, crea rama, envía PR
-4. Los scrapers deben ir en `etl/` con su propio `README`
-5. Todo PR debe pasar lint y build
+4. Todo PR debe pasar CI (lint + build)
 
 ## ⚖️ Licencia
 
-MIT - Ver [LICENSE](LICENSE)
-
----
-
-*Proyecto iniciado el 13 de mayo de 2026. Construido con datos reales del Congreso de los Diputados.*
+MIT — Ver [LICENSE](LICENSE)

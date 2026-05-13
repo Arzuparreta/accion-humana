@@ -1,187 +1,144 @@
 # 🜁 Acción Humana
 
-> *“El Estado no existe fuera de las personas que lo conforman.”*  
-> **Acción Humana** es una máquina de transparencia radical, políticamente agnóstica, que traduce los datos públicos al lenguaje del ciudadano y expone la maquinaria estatal sin un solo marco ideológico.  
-> El sitio es completamente *open source*, se despliega con coste cero y está diseñado para que cualquier persona pueda entender, navegar y anotar la realidad política y económica de España sin los filtros de los medios.
+> *"El Estado no existe fuera de las personas que lo conforman."*
+**Acción Humana** es una máquina de transparencia radical sobre la política española. Toma los datos públicos —votaciones, contratos, presupuestos, puertas giratorias— y los traduce al lenguaje del ciudadano. Sin editoriales, sin filtros ideológicos, sin tratar las instituciones como si tuvieran voluntad propia.
 
 ---
 
 ## 🧭 Visión y principios
 
-- **Agnosticismo político**: No defendemos ningún partido, ni siquiera los que dicen ser liberales. Solo mostramos datos objetivos y relaciones entre ellos.
-- **Ingeniería inversa narrativa**: El Estado produce cifras enrevesadas (prima de riesgo, IPC subyacente, déficit estructural…). Nosotros explicamos qué significan realmente y cómo leerlas sin trampas.
-- **Transparencia radical**: Cada euro público, cada sueldo, cada contrato, cada voto estará enlazado a las personas que lo deciden.
-- **Colaboración abierta**: Los usuarios podrán añadir anotaciones (estilo *hypothes.is*) que enriquezcan el contexto, sin adulterar los datos oficiales.
-- **Coste cero y soberanía tecnológica**: Todo el stack se ejecuta en planes gratuitos (Vercel, Supabase, GitHub Actions) y cualquier persona puede levantar su propia instancia.
+- **Individualismo metodológico**: El Estado, el Gobierno, los partidos no actúan. Actúan PERSONAS. Cada voto, cada contrato, cada decisión se enlaza a individuos concretos.
+- **La excepción es la información**: 349 diputados votando en bloque no es noticia. 1 diputado votando contra su grupo SÍ lo es. La UI debe resaltar divergencias, no listar uniformidades.
+- **Trazabilidad radical**: Cada iniciativa legislativa debe mostrar su origen real: ¿gobierno? ¿UE? ¿lobby? ¿veto presupuestario? El ciudadano sigue el hilo de QUIÉN decidió QUÉ.
+- **Sin editorializar**: Los datos hablan solos. No decimos "esto está mal". Mostramos quién, cómo y por qué. El ciudadano infiere.
+- **Coste cero y soberanía tecnológica**: Stack gratuito (Vercel, Supabase, GitHub Actions). Cualquiera puede levantar su instancia.
 
 ---
 
 ## 🏛️ Arquitectura
 
-| Componente          | Tecnología                         | Plan gratuito              |
-|---------------------|------------------------------------|----------------------------|
-| Frontend            | Next.js 14 (App Router) + Tailwind + shadcn/ui | Vercel Hobby           |
-| Backend/API         | Next.js API Routes, edge functions | Incluido                   |
-| Base de datos       | Supabase (PostgreSQL)              | 500 MB, 2 proyectos        |
-| Autenticación       | Supabase Auth (GitHub, email)      | 50.000 MAU                 |
-| Almacenamiento      | Supabase Storage                   | 1 GB                       |
-| ETL / Scraping      | Python (httpx, BeautifulSoup, pandas) + GitHub Actions | 2000 min/mes   |
-| Búsqueda semántica  | Meilisearch en Oracle Cloud Always Free (4 vCPU ARM, 24 GB) | 0 €           |
-| Anotaciones         | Hypothesis (embebido) o tabla propia en Supabase | 0 €                 |
-| Gráficos            | Recharts / Observable Plot         | Open source                |
-| CI/CD               | GitHub Actions                     | Gratuito                   |
+| Componente | Tecnología | Plan |
+|-----------|-----------|------|
+| Frontend | Next.js 14 (App Router) + Tailwind + shadcn/ui | Vercel Hobby |
+| Base de datos | Supabase (PostgreSQL) | 500 MB Free |
+| ETL / Scraping | Python 3.12 (psycopg2, httpx, BeautifulSoup) + GitHub Actions | 2000 min/mes |
+| Anotaciones | Tabla propia en Supabase | Ilimitado |
+| Autenticación | Supabase Auth | 50.000 MAU |
+| CI/CD | GitHub Actions | Gratuito |
 
 ---
 
-## 🗓️ Fases de desarrollo
+## 📊 Fuentes de datos
 
-### Fase 0 – Fundación (2 semanas)
-
-**Objetivo**: Repositorio público, esqueleto de la aplicación y base de datos vacía desplegada.
-
-**Tareas**:
-
-- [ ] Crear monorepo en GitHub: `accion-humana/web` y `accion-humana/etl`, licencia MIT.
-- [ ] Inicializar Next.js (App Router) con Tailwind y shadcn/ui.
-- [ ] Configurar Supabase: crear tablas base (`politicians`, `parties`, `coalitions`).
-- [ ] Conectar Supabase desde Next.js (usando `@supabase/supabase-js`).
-- [ ] Desplegar en Vercel y verificar que el pipeline CI/CD funciona.
-- [ ] Añadir Hypothesis como script externo, comprobando que se puede activar/desactivar un botón de “Anotaciones”.
-- [ ] Redactar `README.md` atractivo llamando a colaboradores.
-- [ ] Diseñar el logo (A dentro de H, en círculo, guiño al símbolo anarquista) en SVG y añadirlo al layout.
+| Fuente | Estado | Datos |
+|--------|--------|-------|
+| **Congreso Open Data** | ✅ | Diputados (CSV/JSON), votaciones (JSON individual), iniciativas, declaraciones de bienes |
+| **INE API** | ✅ | IPC, PIB, EPA, deuda. OpenAPI/Swagger. Series desde 2002. |
+| **datos.gob.es** | ✅ | 112K datasets del Gobierno. Catálogo de todas las AAPP. |
+| **Civio (GitHub)** | ✅ | `presupuesto-pge`: parser open source de PGE. `scraper-ccaa-budget-summaries`. |
+| **Portal Transparencia** | ⚠️ | URLs cambiadas. Retribuciones accesibles vía datos.gob.es. |
+| **Apispain** | ❌ | Muerto. Sustituir por scraping directo de contrataciondelestado.es. |
+| **Senado** | ❓ | Pendiente verificar. |
 
 ---
 
-### Fase 1 – Políticos y dinero (4-6 semanas)
+## 🗄️ Modelo de datos
 
-**Objetivo**: La base de datos de actores políticos y sus remuneraciones. Primer gran atractivo.
+### Tablas principales
 
-**Fuentes de datos**:
+| Tabla | Qué almacena |
+|-------|-------------|
+| `politicians` | Personas con ID del Congreso, nombre, biografía |
+| `parties` | Partidos políticos (nombre, acrónimo, color) |
+| `legislatures` | Legislaturas I-XV |
+| `politician_memberships` | Diputado en cada legislatura (partido, circunscripción) |
+| `voting_sessions` | Sesiones de votación (fecha, título, número de expediente) |
+| `votes` | Voto individual: Sí/No/Abstención/No vota. UNIQUE por (sesión, diputado) |
+| `initiatives` | Iniciativas legislativas (tipo, proponente, trazabilidad UE) |
+| `power_relationships` | Cadena de mando: quién controla a quién (líder → portavoz → diputado) |
+| `revolving_door` | Puertas giratorias: cargo público → empresa privada |
+| `annotations` | Anotaciones de usuarios por entidad |
+| `contracts` | Contratos públicos (Fase 2) |
+| `budgets` | Presupuestos (Fase 2) |
+| `economic_indicators` | Series temporales del INE (Fase 3) |
 
-- Portal de Transparencia (retribuciones altos cargos): CSV en `transparencia.gob.es`
-- Congreso de los Diputados: datos abiertos de diputados y declaraciones de bienes.
-- Senado (similar).
-- Parlamentos autonómicos (priorizar los más poblados: Andalucía, Cataluña, Madrid, C. Valenciana).
-- Apispain (contratos públicos y subvenciones) – API unificada con buscador semántico.
+### Función SQL destacada
 
-**ETL (scripts en Python)**:
-
-- Descarga diaria de CSVs y APIs.
-- Normalización de nombres (usar `thefuzz` para fuzzy matching).
-- Cruce automático: si un contrato lo firma “María Pérez”, buscar si es un político con cargo y linkar.
-- Insertar en Supabase.
-
-**Frontend**:
-
-- [ ] Página de inicio con buscador unificado.
-- [ ] Ficha de político: foto, partido, cargos (timeline), retribuciones (tabla y gráfico), contratos que ha firmado, declaración de bienes.
-- [ ] Navegación rizomática: de un contrato al firmante, al partido, a la partida presupuestaria (cuando exista).
-- [ ] Capa de traducción: tooltips que expliquen qué es una “dieta”, “complemento específico”, “declaración de bienes” (con link a la ley).
-- [ ] Botón de “Anotaciones” en cada ficha, cargando Hypothesis.
-- [ ] Gráfico comparativo: sueldo vs. salario medio en España.
+`get_divergences()` — detecta votos donde un diputado votó distinto a la mayoría de su grupo parlamentario. Excluye ausencias ("No vota"). Es la base del feed de divergencias.
 
 ---
 
-### Fase 2 – Presupuestos y gasto público (4 semanas)
+## 📅 Estado actual y roadmap
 
-**Objetivo**: Visualizar el dinero desde los PGE hasta la ejecución real, enlazando con los políticos de la Fase 1.
+### ✅ Fase 0+1 — Fundación y políticos (COMPLETADO)
 
-**Fuentes**:
+- [x] Monorepo (`web/` + `etl/`), licencia MIT
+- [x] Next.js 14 (App Router) + Tailwind + shadcn/ui desplegado en Vercel
+- [x] Supabase con schema completo (15 tablas, RLS, pg_trgm)
+- [x] 350 diputados activos de la XV Legislatura ingeridos (CSV del Congreso)
+- [x] 9 partidos clasificados con colores
+- [x] Buscador unificado en home
+- [x] Ficha de diputado con: partido, circunscripción, timeline de legislaturas, biografía
+- [x] Cadena de mando: 473 relaciones de poder (líder → portavoz → diputado)
+- [x] Puertas giratorias: 20 casos documentados (Wikipedia)
+- [x] Página de distorsión electoral (D'Hondt, votos por escaño, umbral provincial)
+- [x] Sistema de anotaciones propio en Supabase
+- [x] Logo SVG (🜁 A+H fusionadas)
+- [x] CI/CD con GitHub Actions (lint + build + ETL en cron)
 
-- Presupuestos Generales del Estado (datos.gob.es).
-- Ejecución presupuestaria (liquidación).
-- Civio “Donde van mis impuestos” tiene parser open source (reutilizable).
-- Apispain para subvenciones (BDNS).
+### ✅ Fase 4 — Votaciones (COMPLETADO)
 
-**Tareas**:
+- [x] ETL de votaciones: 4.200 votos individuales de la sesión 177 (30 abril 2026)
+- [x] Página `/votaciones`: listado de sesiones con badge de divergencias
+- [x] Página `/votaciones/[id]`: desglose por partido con barras + divergencias destacadas
+- [x] Función SQL `get_divergences()` para detección automática
+- [x] Historial de voto individual en ficha de diputado
 
-- [ ] ETL que procese presupuestos anuales y ejecución real por partida.
-- [ ] Visualización interactiva de gasto: drill-down por ministerio, programa, beneficiario.
-- [ ] Cada partida enlazada a su responsable político.
-- [ ] “Traducción” de conceptos presupuestarios (ej: “transferencias corrientes”).
-- [ ] Página de comparativa: presupuestado vs. ejecutado, con alertas de desviaciones.
+### 🔜 Fase 2 — Presupuestos y gasto público
 
----
+- [ ] ETL de Presupuestos Generales del Estado (usando Civio `presupuesto-pge`)
+- [ ] Visualización drill-down: ministerio → programa → beneficiario
+- [ ] Cada partida enlazada a su responsable político
+- [ ] Comparativa presupuestado vs ejecutado
 
-### Fase 3 – Indicadores económicos con antídoto (3 semanas)
+### 🔜 Fase 3 — Indicadores económicos
 
-**Objetivo**: Mostrar los grandes números del telediario (IPC, PIB, prima de riesgo) y destripar su significado real.
+- [ ] ETL del INE (API JSON verificada) para IPC, PIB, EPA, deuda
+- [ ] Páginas con gráficos históricos + explicación sin jerga
+- [ ] Vinculación automática entre indicadores
 
-**Fuentes**:
+### 🔜 Fase 1 (pendiente) — Dinero
 
-- INE (API: IPC, PIB, EPA, etc.)
-- Banco de España / Tesoro Público (deuda, prima de riesgo)
-- Eurostat (comparativas europeas).
+- [ ] Retribuciones de altos cargos (Portal Transparencia vía datos.gob.es)
+- [ ] Contratos públicos (contrataciondelestado.es)
+- [ ] Cruce automático: firmante de contrato ↔ político
+- [ ] Declaraciones de bienes del Congreso
 
-**Tareas**:
+### 🔜 Fase 5 — Comunidad y búsqueda
 
-- [ ] ETL que recolecte series temporales diarias/mensuales.
-- [ ] Página por indicador con:
-  - Gráfico histórico interactivo.
-  - Apartado “¿Qué significa realmente?” (definición clara, cita de economistas).
-  - Apartado “¿Cómo se manipula?” (cambios de base, ejemplos históricos).
-  - Vinculación automática: si sube la deuda → link a presupuestos; si baja el paro → link a EPA y tasa de temporalidad.
-- [ ] Anotaciones colaborativas habilitadas para que la comunidad pueda añadir contexto (ej: “Este IPC no incluye la vivienda en alquiler”).
-
----
-
-### Fase 4 – Votaciones y promesas (3 semanas)
-
-**Objetivo**: Seguimiento de la actividad parlamentaria y cumplimiento de programas electorales.
-
-**Fuentes**:
-
-- Datos abiertos del Congreso (votaciones).
-- Proyecto ActionCheck (promesas electorales) – open source, se puede integrar.
-
-**Tareas**:
-
-- [ ] ETL para votaciones por diputado.
-- [ ] Ficha de diputado enriquecida con su historial de voto.
-- [ ] Matriz de voto por partido y por ley.
-- [ ] Comparador de promesas vs. acciones (cruce con votaciones y presupuestos).
+- [ ] Meilisearch en Oracle Cloud Always Free
+- [ ] Búsqueda semántica en frontend
+- [ ] Moderación de anotaciones
+- [ ] Fotos de diputados
 
 ---
 
-### Fase 5 – Comunidad y búsqueda avanzada (continuo)
+## ⚠️ Problemas conocidos
 
-**Objetivo**: Búsqueda semántica ultrarrápida, anotaciones personalizadas y contribuciones de la comunidad.
-
-**Tareas**:
-
-- [ ] Desplegar Meilisearch en Oracle Cloud e indexar todas las entidades (políticos, contratos, partidas…).
-- [ ] Implementar búsqueda instantánea en el frontend.
-- [ ] Sistema de anotaciones propio (si Hypothesis no es suficiente) guardando en Supabase, con posibilidad de reportar “pistas” (nuevas fuentes) que los mantenedores puedan integrar.
-- [ ] Ranking de entidades más anotadas/comentadas (sin convertirlo en un foro caótico).
+- **Rate-limit del Congreso**: El servidor del Congreso bloquea IPs tras muchas peticiones. Los scrapers usan `curl` con User-Agent. Si fallan con 403, esperar. La web del Congreso es la única fuente bloqueable; INE y datos.gob.es no tienen este problema.
+- **Supabase publishable key**: El proyecto usa el formato nuevo de claves (`sb_publishable_...`). Las JWT legacy no funcionan. Para escrituras ETL se usa PostgreSQL directo.
+- **CI**: Necesita `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` como env vars (son públicas). `DATABASE_URL` como secreto para el ETL.
 
 ---
 
-## 🛠️ Guía de contribución (para colaboradores externos)
+## 🛠️ Guía de contribución
 
-- Revisa los issues etiquetados `good first issue`.
-- El `README.md` incluye cómo levantar el proyecto localmente con `docker-compose` (opcional) o manualmente con Node.js y Python.
-- Los scrapers deben ir en `etl/` con su propio `README` y fichero de dependencias.
-- Toda contribución se hace mediante Pull Request y debe pasar los checks de CI (lint, formato, tests básicos).
-
----
-
-## 📅 Roadmap resumido
-
-| Fase | Nombre                | Entregable principal                        | Semanas |
-|------|-----------------------|---------------------------------------------|---------|
-| 0    | Fundación             | Repo, esqueleto, despliegue                 | 2       |
-| 1    | Políticos y dinero    | Fichas de cargos + retribuciones + contratos| 4-6     |
-| 2    | Presupuestos y gasto  | Visualización del gasto público enlazada    | 4       |
-| 3    | Indicadores económicos| Páginas con “antídoto” de IPC, deuda, etc.  | 3       |
-| 4    | Votaciones y promesas | Seguimiento parlamentario                   | 3       |
-| 5    | Comunidad y búsqueda  | Meilisearch, anotaciones propias, feedback  | continuo|
+- Revisa los issues etiquetados `good first issue`
+- `README.md` explica cómo levantar el proyecto
+- Los scrapers van en `etl/` con `PYTHONPATH=src`
+- Toda contribución por Pull Request, debe pasar CI (lint + build)
+- Leer `AGENTS.md` antes de tocar código — contiene la visión y las reglas
 
 ---
 
-## ⚖️ Nota sobre la neutralidad
-
-**Acción Humana** no editorializa. Cada “traducción” estará basada en definiciones técnicas de economistas y juristas de todas las escuelas. Las anotaciones de los usuarios son un espacio independiente y moderado solo contra spam. El código fuente abierto garantiza que cualquiera pueda auditar cómo se procesan los datos.
-
----
-
-*Plan iniciado el 13 de mayo de 2026. Este documento evolucionará con el proyecto.*
+*Plan actualizado el 13 de mayo de 2026. Refleja el estado real del proyecto.*
