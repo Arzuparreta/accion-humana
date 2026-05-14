@@ -61,6 +61,9 @@ la metodología es invisible.
 | `initiatives` | Iniciativas legislativas (tipo, proponente, trazabilidad UE) |
 | `power_relationships` | Cadena de mando: quién controla a quién (líder → portavoz → diputado) |
 | `revolving_door` | Puertas giratorias: cargo público → empresa privada |
+| `revolving_door_candidates` | Candidatos de puertas giratorias pendientes de revisión |
+| `revolving_door_sources` | Fuentes públicas asociadas a candidatos y casos publicados |
+| `organizations` | Empresas, organismos y entidades enlazadas a movimientos |
 | `annotations` | Anotaciones de usuarios por entidad |
 | `contracts` | Contratos públicos (Fase 2) |
 | `budgets` | Presupuestos (Fase 2) |
@@ -85,6 +88,7 @@ la metodología es invisible.
 - [x] Ficha de diputado con: partido, circunscripción, timeline de legislaturas, biografía
 - [x] Cadena de mando: 473 relaciones de poder (líder → portavoz → diputado)
 - [x] Puertas giratorias: 20 casos documentados (Wikipedia)
+- [x] Pipeline de investigación para puertas giratorias: candidatos, fuentes, revisión y publicación
 - [x] Página de distorsión electoral (D'Hondt, votos por escaño, umbral provincial)
 - [x] Sistema de anotaciones propio en Supabase
 - [x] Sistema de marca SVG: símbolo, favicon, iconos app, Open Graph y banner GitHub
@@ -101,8 +105,8 @@ la metodología es invisible.
 ### 🔜 Fase 1b — Datos pendientes de alta prioridad
 
 - [ ] ETL de asistencia de diputados (Congreso publica presencia por sesión)
-- [ ] Puertas giratorias: ampliar más allá de los 20 casos manuales (CNMC, prensa, transparencia)
-- [ ] Puertas giratorias: añadir fechas, meses de periodo de enfriamiento, URL de fuente por caso
+- [ ] Puertas giratorias: ampliar más allá de los 20 casos manuales con fuentes públicas primarias
+- [x] Puertas giratorias: añadir soporte para fechas, meses entre fechas registradas y URL de fuente por caso
 
 ### 🔜 Fase 2 — Presupuestos y gasto público
 

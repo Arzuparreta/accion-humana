@@ -37,9 +37,15 @@ export default async function PoliticianPage({ params }: PageProps) {
     .select("*, superior:superior_id(full_name), party:parties(acronym, color)")
     .eq("person_id", id)
 
-  const { data: revolvingDoors } = await supabase
-    .from("revolving_door")
+  const { data: revolvingDoors, error: revolvingDoorError } = await supabase
+    .from("v_revolving_door_public")
     .select("*").eq("person_id", id)
+
+  const { data: legacyRevolvingDoors } = revolvingDoorError
+    ? await supabase
+        .from("revolving_door")
+        .select("*").eq("person_id", id)
+    : { data: null }
 
   const { data: attendance } = await supabase
     .from("v_attendance_summary")
@@ -53,7 +59,7 @@ export default async function PoliticianPage({ params }: PageProps) {
       votes={(votes || []) as Record<string, unknown>[]}
       totalVotes={totalVotes}
       powerRels={(powerRels || []) as Record<string, unknown>[]}
-      revolvingDoors={(revolvingDoors || []) as Record<string, unknown>[]}
+      revolvingDoors={(revolvingDoors || legacyRevolvingDoors || []) as Record<string, unknown>[]}
       attendance={attendance as { total_sessions: number; sessions_present: number; attendance_pct: number } | null}
     />
   )

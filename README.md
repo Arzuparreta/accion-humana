@@ -25,6 +25,11 @@ cd web && npm install && npm run dev
 # ETL (scrapers)
 cd etl && pip install -r requirements.txt
 PYTHONPATH=src python -m src.congreso.diputados
+
+# Puertas giratorias (candidatos + revisión)
+PYTHONPATH=src python -m src.puertas_giratorias.ingest --csv puertas.csv --dry-run
+PYTHONPATH=src python -m src.puertas_giratorias.review list
+PYTHONPATH=src python -m src.puertas_giratorias.review publish <candidate_id> --reviewed-by <nombre>
 ```
 
 ## 📖 Para agentes AI
@@ -39,6 +44,13 @@ Lee **[AGENTS.md](AGENTS.md)** antes de tocar código. Contiene la visión, los 
 | [INE API](https://www.ine.es/dyngs/DataLab/manual.html?cid=66) | ✅ API JSON con OpenAPI/Swagger |
 | [datos.gob.es](https://datos.gob.es) | ✅ 112K datasets del Gobierno |
 | [Civio (GitHub)](https://github.com/civio) | ✅ Parsers open source de presupuestos (EUPL) |
+
+## Puertas giratorias
+
+La tabla pública `revolving_door` contiene casos verificados. La investigación entra primero en
+`revolving_door_candidates` con sus evidencias en `revolving_door_sources`. La publicación exige
+al menos una fuente pública primaria: registro mercantil, documento societario, registro de gobierno
+corporativo, página corporativa, resolución pública o repositorio documental equivalente.
 
 ## 🤝 Contribuir
 

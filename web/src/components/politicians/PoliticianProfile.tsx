@@ -219,6 +219,23 @@ export function PoliticianProfile({
                               en {String(entry.private_organization || "")}
                             </span>
                           </div>
+                          <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-muted-foreground">
+                            {entry.private_start_date ? (
+                              <span>
+                                Inicio privado: {formatProfileDate(String(entry.private_start_date))}
+                              </span>
+                            ) : null}
+                            {(entry.primary_source_url || entry.source_url) ? (
+                              <a
+                                href={String(entry.primary_source_url || entry.source_url)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="font-medium text-foreground underline-offset-4 hover:underline"
+                              >
+                                Fuente
+                              </a>
+                            ) : null}
+                          </div>
                         </div>
                       ))}
                     </CardContent>
@@ -365,4 +382,12 @@ export function PoliticianProfile({
       </SectionTabs>
     </div>
   )
+}
+
+function formatProfileDate(value: string) {
+  return new Date(`${value}T00:00:00`).toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
 }

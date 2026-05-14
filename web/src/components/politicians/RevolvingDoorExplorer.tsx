@@ -17,31 +17,30 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
   const tabs = [
     { value: "all", label: `Todos (${cases.length})` },
     ...sectors.map((sector) => ({ value: sector, label: sector })),
-    { value: "about", label: "¿Qué son?" },
+    { value: "sources", label: "Fuentes" },
   ]
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
         title="Puertas giratorias"
-        description={`${uniquePeople} personas · ${cases.length} movimientos documentados entre sector público y privado.`}
+        description={`${uniquePeople} personas · ${cases.length} movimientos documentados con fuente pública.`}
       />
 
       <SectionTabs tabs={tabs} defaultTab="all">
         {(active) => {
-          if (active === "about") {
+          if (active === "sources") {
             return (
               <Card className="bg-card/85">
                 <CardHeader>
-                  <CardTitle className="text-lg">¿Qué son las puertas giratorias?</CardTitle>
+                  <CardTitle className="text-lg">Fuentes registradas</CardTitle>
                   <CardDescription>
-                    El movimiento de altos cargos entre el sector público y el privado tras finalizar su responsabilidad pública.
-                    La Ley 3/2015 regula el régimen de incompatibilidades de los altos cargos de la Administración General del Estado.
+                    Cada movimiento puede incluir una o varias fuentes públicas asociadas.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="text-xs text-muted-foreground">
-                  Fuente: Wikipedia, Civio. La Ley 3/2015 establece un periodo de incompatibilidad de 2 años para altos
-                  cargos que pasan al sector privado.
+                  Tipos de fuente: registros mercantiles, documentos societarios, registros de gobierno corporativo,
+                  páginas corporativas, resoluciones públicas y repositorios documentales.
                 </CardContent>
               </Card>
             )
@@ -63,6 +62,13 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
                 <Card className="bg-card/85">
                   <CardContent className="space-y-3 p-4 sm:p-6">
                     {filtered.map((entry, index) => {
+                      const primarySource =
+                        entry.sources?.find((source) => source.source_type === "primary")?.source_url ||
+                        entry.primary_source_url ||
+                        entry.source_url
+                      const sourceName =
+                        entry.sources?.find((source) => source.source_type === "primary")?.source_name ||
+                        (entry.primary_source_url || entry.source_url ? "Fuente" : null)
                       const personName = entry.person_id ? (
                         <Link href={`/diputados/${entry.person_id}`} className="truncate font-medium hover:underline">
                           {entry.person_name}
@@ -88,6 +94,30 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
                               <span className="font-medium text-foreground">{entry.private_role}</span> en{" "}
                               {entry.private_organization}
                             </div>
+                            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                              {entry.public_exit_date ? (
+                                <span>Cese: {formatDate(entry.public_exit_date)}</span>
+                              ) : null}
+                              {entry.private_start_date ? (
+                                <span>Inicio privado: {formatDate(entry.private_start_date)}</span>
+                              ) : null}
+                              {entry.authorization_date ? (
+                                <span>Autorización: {formatDate(entry.authorization_date)}</span>
+                              ) : null}
+                              {entry.cooling_off_months != null ? (
+                                <span>{entry.cooling_off_months} meses entre fechas registradas</span>
+                              ) : null}
+                              {primarySource ? (
+                                <a
+                                  href={primarySource}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="font-medium text-foreground underline-offset-4 hover:underline"
+                                >
+                                  {sourceName}
+                                </a>
+                              ) : null}
+                            </div>
                           </div>
                         </div>
                       )
@@ -101,4 +131,12 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
       </SectionTabs>
     </div>
   )
+}
+
+function formatDate(value: string) {
+  return new Date(`${value}T00:00:00`).toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
 }
