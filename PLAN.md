@@ -126,11 +126,11 @@ la metodología es invisible.
 
 - [ ] Retribuciones de altos cargos (BOE — nombramientos + Portal Transparencia vía datos.gob.es)
 - [x] Contratos públicos (PCSP — plataforma de contratación del sector público, ATOM/XML)
-- [ ] Cruce automático: firmante de contrato ↔ político (órgano contratante → cargo público responsable)
+- [x] Cruce automático: firmante de contrato ↔ político (órgano contratante → cargo público responsable)
 - [x] Declaraciones de bienes y rentas + intereses económicos del Congreso (scrape de ficha por `codParlamentario`, dos tipos de PDF por diputado, semanal)
 - [ ] Declaraciones de actividades (sólo disponibles vía iniciativas, no como PDF — pendiente diseño)
 - [x] Subvenciones públicas (BDNS — API pública de infosubvenciones.es; solo organizaciones; diario en cron)
-- [ ] Cruce subvención ↔ político (nivel3/órgano concedente → cargo público responsable)
+- [x] Cruce subvención ↔ político (nivel3/órgano concedente → cargo público responsable)
 - [ ] Fondos UE (PAC y fondos estructurales) trazados al receptor final
 - [ ] Pensiones / Seguridad Social — datos agregados, no individuales (límite de privacidad legal)
 
