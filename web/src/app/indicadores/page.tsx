@@ -8,36 +8,22 @@ import { PageHeader } from "@/components/domain/PageHeader"
 export const revalidate = 3600
 
 export default async function IndicadoresPage() {
-  const { data: indicators } = await supabase
+  const { data: rows } = await supabase
     .from("economic_indicators")
-    .select("indicator_code, indicator_name, unit")
+    .select("indicator_code, indicator_name, unit, period, value")
     .order("indicator_code")
+    .order("period", { ascending: false })
 
-  // Get latest value for each indicator
+  // Keep only the first (latest) row per indicator_code
   const unique: Record<string, { name: string; unit: string; latest: string; value: number }> = {}
-  const rows = (indicators || []) as unknown as Array<{ indicator_code: string; indicator_name: string; unit: string }>
-  for (const row of rows) {
+  for (const row of rows ?? []) {
     if (!unique[row.indicator_code]) {
       unique[row.indicator_code] = {
         name: row.indicator_name,
         unit: row.unit,
-        latest: "",
-        value: 0,
+        latest: row.period,
+        value: row.value,
       }
-    }
-  }
-
-  // Get latest period for each
-  for (const code of Object.keys(unique)) {
-    const { data } = await supabase
-      .from("economic_indicators")
-      .select("period, value")
-      .eq("indicator_code", code)
-      .order("period", { ascending: false })
-      .limit(1)
-    if (data && data.length > 0) {
-      unique[code].latest = data[0].period
-      unique[code].value = data[0].value
     }
   }
 

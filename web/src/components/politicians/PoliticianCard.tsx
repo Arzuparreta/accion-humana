@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { PartyBadge } from "@/components/domain/PartyBadge"
 import type { PoliticianWithMemberships } from "@/types"
 
@@ -10,12 +11,17 @@ interface PoliticianCardProps {
 export function PoliticianCard({ politician }: PoliticianCardProps) {
   const membership = politician.politician_memberships?.[0]
   const party = membership?.party
+  const initials = `${politician.first_name[0] ?? ""}${politician.last_name[0] ?? ""}`.toUpperCase()
 
   return (
     <Link href={`/diputados/${politician.id}`}>
       <Card className="ui-card-link h-full cursor-pointer bg-card/85">
         <CardHeader className="space-y-3">
           <div className="flex items-start gap-3">
+            <Avatar size="default" className="mt-0.5 shrink-0">
+              <AvatarImage src={politician.photo_url ?? undefined} alt={politician.full_name} />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
             <div className="min-w-0 flex-1 space-y-1">
               <CardTitle className="text-base text-balance sm:text-lg">{politician.full_name}</CardTitle>
               {membership?.constituency && (

@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { AnnotationPanel } from "@/components/annotations/AnnotationPanel"
 import { PageHeader } from "@/components/domain/PageHeader"
 import { PartyBadge } from "@/components/domain/PartyBadge"
@@ -33,6 +34,8 @@ export function PoliticianProfile({
   revolvingDoors: rd,
 }: Props) {
   const fullName = String(p.full_name || "")
+  const photoUrl = p.photo_url as string | undefined
+  const initials = [String(p.first_name || "").charAt(0), String(p.last_name || "").charAt(0)].join("").toUpperCase()
   const bio = (p.raw_data as Record<string, unknown> | undefined)?.biografia as string | undefined
   const memberships = (p.politician_memberships || []) as Array<Record<string, unknown>>
   const econDecls = (p.economic_declarations || []) as Array<Record<string, unknown>>
@@ -71,6 +74,10 @@ export function PoliticianProfile({
         }
         eyebrow={
           <>
+            <Avatar className="size-14 shrink-0">
+              <AvatarImage src={photoUrl} alt={fullName} />
+              <AvatarFallback className="text-base">{initials}</AvatarFallback>
+            </Avatar>
             {curParty ? (
               <PartyBadge acronym={curParty.acronym} color={curParty.color} className="text-sm" />
             ) : null}
