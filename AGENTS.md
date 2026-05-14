@@ -1,4 +1,4 @@
-# Acción Humana — Manifiesto para agentes
+# España Transparente — Manifiesto para agentes
 
 ## REGLA DE ORO: Separación metodología / contenido
 

@@ -1,7 +1,6 @@
-# 🜁 Acción Humana
+# 🜁 España Transparente
 
-> *"El Estado no existe fuera de las personas que lo conforman."*
-**Acción Humana** es una máquina de transparencia radical sobre la política española. Toma los datos públicos —votaciones, contratos, presupuestos, puertas giratorias— y los traduce al lenguaje del ciudadano. Sin editoriales, sin filtros ideológicos, sin tratar las instituciones como si tuvieran voluntad propia.
+**España Transparente** es una máquina de transparencia radical sobre la política española. Toma los datos públicos —votaciones, contratos, presupuestos, puertas giratorias— y los traduce al lenguaje del ciudadano. Sin editoriales, sin filtros ideológicos, sin tratar las instituciones como si tuvieran voluntad propia.
 
 ---
 
