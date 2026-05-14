@@ -8,4 +8,5 @@ tenacity
 pydantic
 psycopg2-binary
 PyYAML
+Pillow>=10.0
 pytest

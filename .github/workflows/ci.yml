@@ -102,3 +102,8 @@ jobs:
       - run: PYTHONPATH=src python -m src.congreso.responsables
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: PYTHONPATH=src python -m src.photos.run --refresh-missing --max-age-days 30
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SUPABASE_URL: https://zktpodkvlgciluhbulwr.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

@@ -143,7 +143,6 @@ def run():
         biografia = d.get("BIOGRAFIA", "").strip()
         fecha_alta = d.get("FECHAALTA", "").strip()
         cod_parlamentario = d.get("CODPARLAMENTARIO", "").strip()
-        photo_url = f"https://www.congreso.es/img/diputados/{cod_parlamentario}.jpg" if cod_parlamentario else None
 
         # Split name
         if "," in full_name:
@@ -155,19 +154,19 @@ def run():
             first_name = " ".join(parts[:-2]) if len(parts) >= 3 else (parts[0] if parts else "")
             last_name = " ".join(parts[-2:]) if len(parts) >= 2 else (parts[-1] if parts else "")
 
-        # Politician upsert
+        # Politician upsert — photo_url is owned by the photos pipeline (etl.src.photos),
+        # so this UPSERT never touches it (neither on insert nor on conflict).
         cur.execute("""
-            INSERT INTO politicians (congress_id, first_name, last_name, full_name, photo_url, cod_parlamentario, raw_data)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO politicians (congress_id, first_name, last_name, full_name, cod_parlamentario, raw_data)
+            VALUES (%s, %s, %s, %s, %s, %s)
             ON CONFLICT (congress_id) DO UPDATE SET
                 first_name = EXCLUDED.first_name,
                 last_name = EXCLUDED.last_name,
                 full_name = EXCLUDED.full_name,
-                photo_url = EXCLUDED.photo_url,
                 cod_parlamentario = EXCLUDED.cod_parlamentario,
                 raw_data = EXCLUDED.raw_data,
                 updated_at = now()
-        """, (cid, first_name, last_name, full_name, photo_url,
+        """, (cid, first_name, last_name, full_name,
               cod_parlamentario or None,
               psycopg2.extras.Json({"biografia": biografia, "formacion": formacion, "grupo": grupo})))
         pol_count += 1

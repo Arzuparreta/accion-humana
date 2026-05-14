@@ -26,23 +26,25 @@ def get_pg_conn():
 
 
 def upsert_politicians(rows: list[dict]) -> int:
-    """Upsert politicians via direct SQL."""
+    """Upsert politicians via direct SQL.
+
+    photo_url is owned by the photos pipeline (etl.src.photos) and is never written here.
+    """
     with get_pg_conn() as conn:
         with conn.cursor() as cur:
             count = 0
             for r in rows:
                 cur.execute("""
-                    INSERT INTO politicians (congress_id, first_name, last_name, full_name, photo_url, raw_data)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO politicians (congress_id, first_name, last_name, full_name, raw_data)
+                    VALUES (%s, %s, %s, %s, %s)
                     ON CONFLICT (congress_id) DO UPDATE SET
                         first_name = EXCLUDED.first_name,
                         last_name = EXCLUDED.last_name,
                         full_name = EXCLUDED.full_name,
-                        photo_url = EXCLUDED.photo_url,
                         raw_data = EXCLUDED.raw_data,
                         updated_at = now()
                 """, (r["congress_id"], r["first_name"], r["last_name"],
-                      r["full_name"], r.get("photo_url"), psycopg2.extras.Json(r.get("raw_data", {}))))
+                      r["full_name"], psycopg2.extras.Json(r.get("raw_data", {}))))
                 count += 1
             conn.commit()
             return count

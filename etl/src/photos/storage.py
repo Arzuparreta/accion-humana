@@ -1,0 +1,89 @@
+"""Supabase Storage wrapper for the politician-photos bucket.
+
+Uses the Storage REST API with the service-role key (writes). Public reads do
+not require a key because the bucket is configured as public.
+"""
+
+import os
+from typing import Optional
+
+import httpx
+
+BUCKET = "politician-photos"
+
+SUPABASE_URL = (os.getenv("SUPABASE_URL")
+                or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+                or "https://zktpodkvlgciluhbulwr.supabase.co").rstrip("/")
+SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+
+
+class StorageError(Exception):
+    pass
+
+
+def _require_service_key() -> str:
+    if not SERVICE_ROLE_KEY:
+        raise StorageError(
+            "SUPABASE_SERVICE_ROLE_KEY is required for photo uploads "
+            "(set it in the environment / GitHub Actions secrets)"
+        )
+    return SERVICE_ROLE_KEY
+
+
+def public_url(key: str) -> str:
+    return f"{SUPABASE_URL}/storage/v1/object/public/{BUCKET}/{key}"
+
+
+def upload_photo(data: bytes, key: str, *, content_type: str = "image/webp") -> str:
+    """Upload `data` to `bucket/key` with upsert. Returns the public URL."""
+    token = _require_service_key()
+    url = f"{SUPABASE_URL}/storage/v1/object/{BUCKET}/{key}"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": content_type,
+        "x-upsert": "true",
+        "Cache-Control": "max-age=604800",  # 7 days — pipeline owns refresh cadence
+    }
+    try:
+        resp = httpx.post(url, content=data, headers=headers, timeout=60.0)
+        resp.raise_for_status()
+    except httpx.HTTPError as exc:
+        body = getattr(getattr(exc, "response", None), "text", "")
+        raise StorageError(f"upload failed for {key}: {exc} {body}") from exc
+    return public_url(key)
+
+
+def ensure_bucket(*, public: bool = True) -> None:
+    """Create the politician-photos bucket if it doesn't exist. Idempotent."""
+    token = _require_service_key()
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+    get = httpx.get(f"{SUPABASE_URL}/storage/v1/bucket/{BUCKET}", headers=headers, timeout=30.0)
+    if get.status_code == 200:
+        return
+    if get.status_code not in (400, 404):
+        raise StorageError(f"unexpected status fetching bucket: {get.status_code} {get.text}")
+
+    payload = {
+        "id": BUCKET,
+        "name": BUCKET,
+        "public": public,
+        "file_size_limit": 10 * 1024 * 1024,
+        "allowed_mime_types": ["image/webp", "image/jpeg", "image/png"],
+    }
+    create = httpx.post(f"{SUPABASE_URL}/storage/v1/bucket", headers=headers,
+                        json=payload, timeout=30.0)
+    if create.status_code not in (200, 201):
+        raise StorageError(f"create bucket failed: {create.status_code} {create.text}")
+
+
+def politician_key(congress_id: str) -> str:
+    """Path convention. Same layout will be used for senators / municipal cargos."""
+    return f"politicians/{congress_id}.webp"
+
+
+def from_storage_url(url: Optional[str]) -> bool:
+    """True if `url` looks like one of ours (used to decide whether to refresh)."""
+    if not url:
+        return False
+    return f"/storage/v1/object/public/{BUCKET}/" in url
