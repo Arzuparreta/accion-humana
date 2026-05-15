@@ -71,7 +71,7 @@ interface Props {
   powerRels: Record<string, unknown>[]
   revolvingDoors: Record<string, unknown>[]
   attendance: AttendanceSummary | null
-  divergentSessionIds?: Set<string>
+  divergentSessionIds?: string[]
   govPosition?: GovPosition | null
   ministryContracts?: MinistryContract[]
 }
@@ -394,7 +394,7 @@ export function PoliticianProfile({
                     const session = vote.voting_sessions as Record<string, string> | undefined
                     const sessionId = session?.id ?? String(vote.voting_session_id ?? "")
                     const voteValue = String(vote.vote || "")
-                    const isDivergent = sessionId ? divergentSessionIds?.has(sessionId) : false
+                    const isDivergent = sessionId ? divergentSessionIds?.includes(sessionId) : false
                     const dateStr = session?.date
                       ? new Date(session.date).toLocaleDateString("es-ES", {
                           day: "numeric",

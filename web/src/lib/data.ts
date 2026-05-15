@@ -115,12 +115,21 @@ export const getDeputyCards = unstable_cache(
 
 export const getParties = unstable_cache(
   async () => {
-    const [parties, stats] = await Promise.all([
+    const [parties, memberships] = await Promise.all([
       supabase.from("parties").select("*").order("acronym"),
-      supabase.from("v_party_stats").select("party_id, deputy_count, attendance_pct, pct_yes, pct_no, pct_abstain"),
+      supabase
+        .from("politician_memberships")
+        .select("party_id")
+        .eq("is_active", true),
     ])
-    const statsByParty = new Map((stats.data ?? []).map((s) => [s.party_id, s]))
-    return (parties.data ?? []).map((p) => ({ ...p, stats: statsByParty.get(p.id) ?? null }))
+    const countByParty = new Map<string, number>()
+    for (const m of memberships.data ?? []) {
+      countByParty.set(m.party_id, (countByParty.get(m.party_id) ?? 0) + 1)
+    }
+    return (parties.data ?? []).map((p) => ({
+      ...p,
+      stats: { deputy_count: countByParty.get(p.id) ?? 0 },
+    }))
   },
   ["parties"],
   { revalidate: HOUR }
@@ -279,8 +288,8 @@ export const getPoliticianProfileData = unstable_cache(
       powerRels: powerRels.data ?? [],
       revolvingDoors: revolvingDoors.data ?? legacyRevolvingDoors?.data ?? [],
       attendance: attendance.data,
-      divergentSessionIds: new Set<string>(
-        (divergences.data ?? []).map((d: { voting_session_id: string }) => d.voting_session_id)
+      divergentSessionIds: (divergences.data ?? []).map(
+        (d: { voting_session_id: string }) => d.voting_session_id
       ),
       govPosition: govPos,
       ministryContracts,

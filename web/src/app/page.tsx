@@ -45,7 +45,6 @@ export default async function HomePage() {
     politicianCount,
     parties,
     contractCount,
-    sessionCount,
     currentBudget,
     recentSessions,
     revolvingDoorCases,
@@ -54,7 +53,6 @@ export default async function HomePage() {
 
   const stats = [
     { label: "Diputados activos", value: `${politicianCount}` },
-    { label: "Sesiones de votación", value: sessionCount.toLocaleString("es-ES") },
     { label: "Contratos públicos", value: contractCount.toLocaleString("es-ES") },
     ...(currentBudget
       ? [{ label: `Presupuesto ${currentBudget.year}`, value: formatBig(currentBudget.total) }]
