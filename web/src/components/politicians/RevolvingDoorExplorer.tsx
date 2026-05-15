@@ -59,13 +59,17 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
                 <Card className="bg-card/85">
                   <CardContent className="space-y-3 p-4 sm:p-6">
                     {filtered.map((entry, index) => {
-                      const primarySource =
-                        entry.sources?.find((source) => source.source_type === "primary")?.source_url ||
-                        entry.primary_source_url ||
-                        entry.source_url
+                      const GENERIC_SOURCE = "es.wikipedia.org/wiki/Puerta_giratoria"
+                      const primarySource = (() => {
+                        const url =
+                          entry.sources?.find((s) => s.source_type === "primary")?.source_url ||
+                          entry.primary_source_url ||
+                          entry.source_url
+                        return url && !url.includes(GENERIC_SOURCE) ? url : null
+                      })()
                       const sourceName =
-                        entry.sources?.find((source) => source.source_type === "primary")?.source_name ||
-                        (entry.primary_source_url || entry.source_url ? "Fuente" : null)
+                        entry.sources?.find((s) => s.source_type === "primary")?.source_name ||
+                        (primarySource ? "Fuente" : null)
                       const personName = entry.person_id ? (
                         <ResponsiveLink href={`/diputados/${entry.person_id}`} className="truncate font-medium hover:underline">
                           {entry.person_name}

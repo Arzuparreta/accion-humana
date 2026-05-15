@@ -32,19 +32,23 @@ export async function RevolvingDoorList({ politicianId }: RevolvingDoorProps) {
               {e.sector && `Sector: ${e.sector}`}
               {e.cooling_off_months != null && ` · ${e.cooling_off_months} meses entre fechas registradas`}
               {e.private_start_date && ` · ${new Date(`${e.private_start_date}T00:00:00`).toLocaleDateString("es-ES")}`}
-              {(e.primary_source_url || e.source_url) && (
-                <>
-                  {" · "}
-                  <a
-                    href={e.primary_source_url || e.source_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-foreground underline-offset-4 hover:underline"
-                  >
-                    Fuente
-                  </a>
-                </>
-              )}
+              {(() => {
+                const url = e.primary_source_url || e.source_url
+                const isGeneric = url?.includes("es.wikipedia.org/wiki/Puerta_giratoria")
+                return url && !isGeneric ? (
+                  <>
+                    {" · "}
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-foreground underline-offset-4 hover:underline"
+                    >
+                      Fuente
+                    </a>
+                  </>
+                ) : null
+              })()}
             </div>
           </div>
         ))}
