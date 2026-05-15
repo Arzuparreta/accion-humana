@@ -112,6 +112,14 @@ export function PoliticianProfile({
     { value: "annotations", label: "Anotaciones" },
   ]
 
+  // Salary calculation — official figures from Congreso transparency page (updated 2026-03-02)
+  const SALARY_BASE = 3366.99
+  const SALARY_RESIDENCE_MADRID = 1032.38
+  const SALARY_RESIDENCE_OTHER = 2162.85
+  const isMadrid = curConstituency.toLowerCase() === "madrid"
+  const residenceAllowance = isMadrid ? SALARY_RESIDENCE_MADRID : SALARY_RESIDENCE_OTHER
+  const baseMonthly = current ? SALARY_BASE + residenceAllowance : null
+
   const voteDistribution = (() => {
     const counts: Record<string, number> = {}
     for (const vote of v) {
@@ -177,6 +185,15 @@ export function PoliticianProfile({
                   hint: "Declaraciones económicas asociadas a esta persona.",
                 },
               ]),
+          ...(baseMonthly !== null
+            ? [
+                {
+                  label: "Retribución mensual",
+                  value: `${Math.round(baseMonthly).toLocaleString("es-ES")} €`,
+                  hint: `Asignación constitucional (${SALARY_BASE.toLocaleString("es-ES")} €) + indemnización por residencia (${residenceAllowance.toLocaleString("es-ES")} €). No incluye complementos por cargos en Mesa, comisiones o portavocías. Fuente: Congreso, mar. 2026.`,
+                },
+              ]
+            : []),
         ]}
       />
 
