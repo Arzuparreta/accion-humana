@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { EconomicDeclaration } from "@/types"
 
 const TYPE_LABELS: Record<string, string> = {
+  actividades: "Declaración de Actividades",
   bienes_rentas: "Declaraciones de bienes y rentas",
   intereses_economicos: "Declaraciones de intereses económicos",
 }
@@ -62,7 +63,7 @@ export function EconomicDeclarationList({ declarations }: Props) {
     ),
   )
 
-  const known = ["bienes_rentas", "intereses_economicos"]
+  const known = ["actividades", "bienes_rentas", "intereses_economicos"]
   const orderedKeys = [
     ...known.filter((k) => grouped.has(k)),
     ...Array.from(grouped.keys()).filter((k) => !known.includes(k)),

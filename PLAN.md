@@ -107,7 +107,7 @@ divergencias del frontend.
 ### En curso / siguiente prioridad
 
 - [ ] Ampliar puertas giratorias con más fuentes primarias y menos dependencia de entradas manuales
-- [ ] Declaraciones de actividades: diseñar extracción y modelo, hoy no tienen pipeline equivalente al de bienes/rentas
+- [x] Declaraciones de actividades: pipeline implementado — URL determinista `/docinte/registro_intereses_diputado_{cod}.pdf`, tipo `actividades` en `economic_declarations`, frontend actualizado
 - [ ] Presupuestos Generales del Estado: ETL base y jerarquía ministerio -> programa -> partida
 - [ ] Fondos UE trazados al receptor final
 - [ ] Búsqueda avanzada / índice dedicado si el volumen empieza a penalizar las consultas
@@ -143,7 +143,7 @@ peor.
 ## Problemas conocidos
 
 - **Rate-limit del Congreso**: el portal del Congreso devuelve 403 tras ráfagas. Los scrapers usan `curl`, User-Agent explícito y `REQUEST_DELAY=1.5s`. No paralelizar peticiones al Congreso.
-- **Declaraciones de actividades**: el Congreso no ofrece un flujo tan limpio como bienes/rentas e intereses; sigue pendiente diseño específico.
+- **Declaraciones de actividades**: ~~pendiente~~ implementado. URL `/docinte/registro_intereses_diputado_{cod}.pdf` (un único PDF por diputado, sin fecha en URL, se actualiza in-place). Tipo `actividades` en `economic_declarations`. Ver `declaraciones.py`.
 - **Referencias YAML**: liderazgo de partido y algunos mapas de responsabilidad siguen siendo datos mantenidos como PR en `etl/data/` por falta de fuente estructurada única.
 - **Presupuestos**: sigue sin haber pipeline estable equivalente al resto de verticales.
 
