@@ -3,7 +3,6 @@ import { PoliticianCard } from "@/components/politicians/PoliticianCard"
 import { LogoHero } from "@/components/layout/LogoHero"
 import { StatGrid } from "@/components/domain/StatGrid"
 import { PartyBadge } from "@/components/domain/PartyBadge"
-import { SearchForm } from "@/components/search/SearchForm"
 import { ResponsiveLink } from "@/components/navigation/NavigationProgress"
 import { getHomeData } from "@/lib/data"
 import { getPartyColor } from "@/lib/domain-style"
@@ -67,15 +66,6 @@ export default async function HomePage() {
       <LogoHero parties={parties ?? []} />
 
       <StatGrid items={stats} />
-
-      {/* Búsqueda */}
-      <section>
-        <h2 className="mb-3 text-xl font-semibold tracking-tight">Buscar</h2>
-        <SearchForm />
-        <p className="mt-2 text-xs text-muted-foreground">
-          Diputados, votaciones, contratos, organizaciones y puertas giratorias. Atajo: ⌘K
-        </p>
-      </section>
 
       {/* Gobierno */}
       {gobierno.length > 0 && (
@@ -149,6 +139,16 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Diputados */}
+      <section>
+        <SectionHeader title="Diputados" href="/diputados" />
+        <div className="ui-grid-cards">
+          {(politicians as unknown as PoliticianWithMemberships[]).map((p) => (
+            <PoliticianCard key={p.id} politician={p} />
+          ))}
+        </div>
+      </section>
+
       {/* Puertas giratorias */}
       {revolvingDoorCases.length > 0 && (
         <section>
@@ -172,16 +172,6 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Diputados */}
-      <section>
-        <SectionHeader title="Diputados" href="/diputados" />
-        <div className="ui-grid-cards">
-          {(politicians as unknown as PoliticianWithMemberships[]).map((p) => (
-            <PoliticianCard key={p.id} politician={p} />
-          ))}
-        </div>
-      </section>
     </div>
   )
 }
