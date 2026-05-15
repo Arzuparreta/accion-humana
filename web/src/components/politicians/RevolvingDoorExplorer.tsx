@@ -32,7 +32,7 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
         {(active) => {
           if (active === "sources") {
             return (
-              <Card className="bg-card/85">
+              <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Fuentes registradas</CardTitle>
                   <CardDescription>
@@ -56,7 +56,7 @@ export function RevolvingDoorExplorer({ cases }: RevolvingDoorExplorerProps) {
               {filtered.length === 0 ? (
                 <EmptyState title="Sin movimientos" description="No hay registros publicados en este sector." />
               ) : (
-                <Card className="bg-card/85">
+                <Card>
                   <CardContent className="space-y-3 p-4 sm:p-6">
                     {filtered.map((entry, index) => {
                       const GENERIC_SOURCE = "es.wikipedia.org/wiki/Puerta_giratoria"

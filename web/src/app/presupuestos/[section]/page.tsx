@@ -99,7 +99,7 @@ export default async function BudgetSectionPage({ params, searchParams }: PagePr
             .sort(([a], [b]) => Number(a) - Number(b))
 
           return (
-            <Card key={p.program_code} className="bg-card/85">
+            <Card key={p.program_code}>
               <CardContent className="px-4 py-4">
                 <div className="flex items-start gap-4">
                   <div className="min-w-0 flex-1 space-y-1">

@@ -29,7 +29,7 @@ export function StatGrid({ items, className }: StatGridProps) {
       style={style}
     >
       {items.map((item) => (
-        <Card key={item.label} className="min-w-0 bg-card/90">
+        <Card key={item.label} className="min-w-0">
           <CardContent className="min-w-0 space-y-1 px-4 py-4">
             <div className="break-words text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               {item.label}

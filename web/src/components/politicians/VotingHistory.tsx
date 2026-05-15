@@ -31,7 +31,7 @@ export function VotingHistory({ votes }: VotingHistoryProps) {
           : ""
 
         return (
-          <Card key={i} className="bg-card/80">
+          <Card key={i}>
             <CardContent className="flex items-start gap-3 px-4 py-4">
               <div className="shrink-0 mt-0.5">
                 <VoteBadge vote={v.vote} />

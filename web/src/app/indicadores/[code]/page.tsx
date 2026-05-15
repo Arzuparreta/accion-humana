@@ -72,7 +72,7 @@ export default async function IndicadorPage({ params }: PageProps) {
         <summary className="mb-3 cursor-pointer text-muted-foreground hover:text-foreground">
           Ver tabla completa de datos
         </summary>
-        <Card className="bg-card/80">
+        <Card>
           <CardContent className="max-h-[320px] overflow-y-auto p-0">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-card">

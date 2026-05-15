@@ -143,7 +143,7 @@ export default async function VotacionPage({ params }: PageProps) {
 
       <div className="space-y-2">
         {sorted.map(([acronym, group]) => (
-          <Card key={acronym} className="bg-card/85">
+          <Card key={acronym}>
             <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center justify-between gap-3 sm:w-24 sm:shrink-0 sm:flex-col sm:items-start">
                 <PartyBadge acronym={acronym} color={group.color} />

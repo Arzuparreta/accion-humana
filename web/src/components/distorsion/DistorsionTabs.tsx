@@ -39,7 +39,7 @@ export function DistorsionTabs({ withVotesPerSeat, maxVotesPerSeat, minVotesPerS
       {(active) => (
         <>
           {active === "votes-per-seat" ? (
-            <Card className="bg-card/85">
+            <Card>
               <CardHeader>
                 <CardTitle className="text-lg">¿Cuántos votos cuesta cada escaño?</CardTitle>
                 <CardDescription>
@@ -84,7 +84,7 @@ export function DistorsionTabs({ withVotesPerSeat, maxVotesPerSeat, minVotesPerS
           ) : null}
 
           {active === "pct-votes" ? (
-            <Card className="bg-card/85">
+            <Card>
               <CardHeader>
                 <CardTitle className="text-lg">% de votos vs % de escaños</CardTitle>
                 <CardDescription>
@@ -116,7 +116,7 @@ export function DistorsionTabs({ withVotesPerSeat, maxVotesPerSeat, minVotesPerS
           ) : null}
 
           {active === "threshold" ? (
-            <Card className="bg-card/85">
+            <Card>
               <CardHeader>
                 <CardTitle className="text-lg">El umbral real por provincia</CardTitle>
                 <CardDescription>

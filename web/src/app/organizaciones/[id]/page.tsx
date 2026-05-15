@@ -58,7 +58,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
       />
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="bg-card/85">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Perfil</CardTitle>
           </CardHeader>
@@ -81,7 +81,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-2">
-        <Card className="bg-card/85">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Contratos recientes</CardTitle>
           </CardHeader>
@@ -103,7 +103,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/85">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Subvenciones recibidas</CardTitle>
           </CardHeader>
@@ -125,7 +125,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/85">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Subvenciones concedidas</CardTitle>
           </CardHeader>
@@ -147,7 +147,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/85">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Puertas giratorias</CardTitle>
           </CardHeader>

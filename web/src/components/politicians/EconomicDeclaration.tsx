@@ -39,7 +39,7 @@ function sourceHost(url: string | undefined) {
 export function EconomicDeclarationList({ declarations }: Props) {
   if (declarations.length === 0) {
     return (
-      <Card className="bg-card/80">
+      <Card>
         <CardContent className="p-4 sm:p-6">
           <p className="text-sm text-muted-foreground">
             No consta declaración publicada en este momento.
@@ -72,7 +72,7 @@ export function EconomicDeclarationList({ declarations }: Props) {
   return (
     <div className="space-y-4">
       {orderedKeys.map((type) => (
-        <Card key={type} className="bg-card/80">
+        <Card key={type}>
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-medium">
               {TYPE_LABELS[type] || TYPE_FALLBACK}

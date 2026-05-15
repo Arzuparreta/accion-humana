@@ -88,7 +88,7 @@ function SubvencionCard({ s }: { s: Subvencion }) {
   const organo = s.nivel3 ?? s.nivel2 ?? "—"
 
   return (
-    <Card className="bg-card/85">
+    <Card>
       <CardContent className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-start sm:gap-4">
         <div className="min-w-0 flex-1 space-y-1.5">
           <div className="flex flex-wrap items-start gap-2">

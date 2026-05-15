@@ -8,7 +8,7 @@ interface InfoPanelProps {
 
 export function InfoPanel({ title, children }: InfoPanelProps) {
   return (
-    <Card className="bg-card/80">
+    <Card>
       <CardHeader className="border-b border-border/60">
         <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>

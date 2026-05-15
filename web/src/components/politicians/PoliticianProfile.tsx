@@ -199,7 +199,7 @@ export function PoliticianProfile({
 
       {/* Cargo gubernamental actual */}
       {govPosition && (
-        <Card className="border-primary/20 bg-card/80">
+        <Card className="border-primary/20">
           <CardContent className="px-4 py-4">
             <div className="flex min-w-0 items-start justify-between gap-3">
               <div className="min-w-0">
@@ -254,7 +254,7 @@ export function PoliticianProfile({
       )}
 
       {voteDistribution.length > 0 ? (
-        <Card className="bg-card/80">
+        <Card>
           <CardContent className="space-y-3 px-4 py-4">
             <div>
               <div className="text-sm font-semibold">Distribución reciente del voto</div>
@@ -330,7 +330,7 @@ export function PoliticianProfile({
                 )}
 
                 {rd.length > 0 ? (
-                  <Card className="bg-card/80">
+                  <Card>
                     <CardContent className="space-y-2 p-4">
                       <h3 className="text-sm font-semibold">Puertas giratorias</h3>
                       {rd.map((entry: Record<string, unknown>, index: number) => (
@@ -427,12 +427,12 @@ export function PoliticianProfile({
 
                     return sessionId ? (
                       <a key={index} href={`/votaciones/${sessionId}`}>
-                        <Card className="bg-card/80 transition-colors hover:bg-card">
+                        <Card className="transition-colors hover:bg-card">
                           {inner}
                         </Card>
                       </a>
                     ) : (
-                      <Card key={index} className="bg-card/80">
+                      <Card key={index}>
                         {inner}
                       </Card>
                     )
@@ -442,7 +442,7 @@ export function PoliticianProfile({
             ) : null}
 
             {active === "trajectory" ? (
-              <Card className="bg-card/80">
+              <Card>
                 <CardContent className="space-y-3 p-4">
                   {[...memberships]
                     .sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
@@ -507,7 +507,7 @@ export function PoliticianProfile({
             ) : null}
 
             {active === "bio" && bio ? (
-              <Card className="bg-card/80">
+              <Card>
                 <CardContent className="p-4 sm:p-6">
                   <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
                     {bio}

@@ -43,7 +43,7 @@ function SectionCard({ row, year }: { row: BudgetSectionRow; year: number }) {
 
   return (
     <ResponsiveLink href={`/presupuestos/${encodeURIComponent(row.section_code)}?year=${year}`}>
-      <Card className="bg-card/85 transition-colors hover:bg-card">
+      <Card className="transition-colors hover:bg-card">
         <CardContent className="flex items-start gap-4 px-4 py-4 sm:items-center">
           <div className="min-w-0 flex-1">
             <div className="text-sm font-medium leading-snug text-balance">
