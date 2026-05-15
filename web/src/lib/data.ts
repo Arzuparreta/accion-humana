@@ -25,6 +25,10 @@ export const getHomeData = unstable_cache(
       contractCount,
       subsidyCount,
       budgetSummaryRows,
+      recentSessions,
+      sessionCount,
+      revolvingDoorCases,
+      gobierno,
     ] = await Promise.all([
       supabase
         .from("politicians")
@@ -33,7 +37,7 @@ export const getHomeData = unstable_cache(
         )
         .eq("politician_memberships.is_active", true)
         .order("full_name")
-        .limit(24),
+        .limit(12),
       supabase.from("politicians").select("*", { count: "exact", head: true }),
       supabase.from("parties").select("acronym, color, name").order("acronym"),
       supabase.from("contracts").select("*", { count: "exact", head: true }),
@@ -42,6 +46,22 @@ export const getHomeData = unstable_cache(
         .from("v_budget_summary")
         .select("year, budget_type, total_credit_initial")
         .eq("year", currentBudgetYear),
+      supabase
+        .from("v_voting_session_summary")
+        .select("id, date, title, total_votes, votes_yes, votes_no, divergence_count")
+        .order("date", { ascending: false })
+        .limit(5),
+      supabase.from("voting_sessions").select("*", { count: "exact", head: true }),
+      supabase
+        .from("v_revolving_door_public")
+        .select("id, person_name, public_role, private_organization, sector")
+        .order("id", { ascending: false })
+        .limit(4),
+      supabase
+        .from("v_gobierno_actual")
+        .select("id, person_name, organization_name, political_party, party_color, politician_id, position_type")
+        .in("position_type", ["presidente_gobierno", "vicepresidente"])
+        .limit(6),
     ])
 
     const budgetTotal = (budgetSummaryRows.data ?? []).reduce(
@@ -59,6 +79,7 @@ export const getHomeData = unstable_cache(
       parties: parties.data ?? [],
       contractCount: contractCount.count ?? 0,
       subsidyCount: subsidyCount.count ?? 0,
+      sessionCount: sessionCount.count ?? 0,
       currentBudget:
         budgetTotal > 0
           ? {
@@ -67,6 +88,9 @@ export const getHomeData = unstable_cache(
               budgetType: currentBudgetType,
             }
           : null,
+      recentSessions: recentSessions.data ?? [],
+      revolvingDoorCases: revolvingDoorCases.data ?? [],
+      gobierno: gobierno.data ?? [],
     }
   },
   ["home-data", PHOTOS_CACHE_VERSION],
