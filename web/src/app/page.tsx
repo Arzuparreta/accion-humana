@@ -45,6 +45,8 @@ export default async function HomePage() {
     politicianCount,
     parties,
     contractCount,
+    subsidyCount,
+    sessionCount,
     currentBudget,
     recentSessions,
     revolvingDoorCases,
@@ -54,6 +56,8 @@ export default async function HomePage() {
   const stats = [
     { label: "Diputados activos", value: `${politicianCount}` },
     { label: "Contratos públicos", value: contractCount.toLocaleString("es-ES") },
+    { label: "Subvenciones", value: subsidyCount.toLocaleString("es-ES") },
+    { label: "Votaciones", value: sessionCount.toLocaleString("es-ES") },
     ...(currentBudget
       ? [{ label: `Presupuesto ${currentBudget.year}`, value: formatBig(currentBudget.total) }]
       : []),
@@ -155,7 +159,7 @@ export default async function HomePage() {
             {revolvingDoorCases.map((c) => (
               <Link
                 key={c.id as string}
-                href="/puertas-giratorias"
+                href={c.person_id ? `/diputados/${c.person_id as string}` : "/puertas-giratorias"}
                 className="rounded-xl border border-border/60 bg-card/80 px-4 py-3 transition-colors hover:border-border hover:bg-card"
               >
                 <p className="font-semibold">{c.person_name as string}</p>

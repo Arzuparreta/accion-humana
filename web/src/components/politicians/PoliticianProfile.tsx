@@ -68,6 +68,8 @@ interface Props {
   pol: Record<string, unknown>
   votes: Record<string, unknown>[]
   totalVotes: number | null
+  votePage?: number
+  votePageSize?: number
   powerRels: Record<string, unknown>[]
   revolvingDoors: Record<string, unknown>[]
   attendance: AttendanceSummary | null
@@ -80,6 +82,8 @@ export function PoliticianProfile({
   pol: p,
   votes: v,
   totalVotes,
+  votePage = 1,
+  votePageSize = 30,
   powerRels: pr,
   revolvingDoors: rd,
   attendance,
@@ -153,6 +157,26 @@ export function PoliticianProfile({
             ) : null}
             {curConstituency ? (
               <span className="text-sm text-muted-foreground">{curConstituency}</span>
+            ) : null}
+            {p.twitter ? (
+              <a
+                href={`https://twitter.com/${String(p.twitter).replace(/^@/, "")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+              >
+                @{String(p.twitter).replace(/^@/, "")}
+              </a>
+            ) : null}
+            {p.website ? (
+              <a
+                href={String(p.website)}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+              >
+                Web oficial
+              </a>
             ) : null}
           </>
         }
@@ -390,7 +414,7 @@ export function PoliticianProfile({
                     </CardContent>
                   </Card>
                 ) : (
-                  v.slice(0, 30).map((vote: Record<string, unknown>, index: number) => {
+                  v.map((vote: Record<string, unknown>, index: number) => {
                     const session = vote.voting_sessions as Record<string, string> | undefined
                     const sessionId = session?.id ?? String(vote.voting_session_id ?? "")
                     const voteValue = String(vote.vote || "")
@@ -437,6 +461,33 @@ export function PoliticianProfile({
                       </Card>
                     )
                   })
+                )}
+                {totalVotes !== null && totalVotes > votePageSize && (
+                  <div className="flex items-center justify-between pt-2 text-sm">
+                    {votePage > 1 ? (
+                      <a
+                        href={`?page=${votePage - 1}#votos`}
+                        className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                      >
+                        ← Anteriores
+                      </a>
+                    ) : (
+                      <span />
+                    )}
+                    <span className="text-xs text-muted-foreground">
+                      {(votePage - 1) * votePageSize + 1}–{Math.min(votePage * votePageSize, totalVotes)} de {totalVotes}
+                    </span>
+                    {votePage * votePageSize < totalVotes ? (
+                      <a
+                        href={`?page=${votePage + 1}#votos`}
+                        className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                      >
+                        Siguientes →
+                      </a>
+                    ) : (
+                      <span />
+                    )}
+                  </div>
                 )}
               </div>
             ) : null}

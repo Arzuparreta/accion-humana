@@ -91,7 +91,7 @@ export default async function OrganizacionPage({ params }: PageProps) {
             ) : (
               contracts.map((contract) => (
                 <div key={contract.id} className="border-l-2 border-muted py-1 pl-3 text-sm">
-                  <ResponsiveLink href={`/contratos`} className="font-medium underline-offset-2 hover:underline">
+                  <ResponsiveLink href={`/contratos/${contract.id}`} className="font-medium underline-offset-2 hover:underline">
                     {contract.title}
                   </ResponsiveLink>
                   <div className="text-xs text-muted-foreground">

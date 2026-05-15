@@ -38,6 +38,8 @@ export function Header() {
             <ResponsiveLink href="/presupuestos" prefetch className={pill}>Presupuestos</ResponsiveLink>
             <ResponsiveLink href="/contratos" prefetch className={pill}>Contratos</ResponsiveLink>
             <ResponsiveLink href="/subvenciones" prefetch className={pill}>Subvenciones</ResponsiveLink>
+            <ResponsiveLink href="/fondos-ue" prefetch className={pill}>Fondos UE</ResponsiveLink>
+            <ResponsiveLink href="/organizaciones" prefetch className={pill}>Organizaciones</ResponsiveLink>
             {divider}
             {/* Contexto */}
             <ResponsiveLink href="/indicadores" prefetch className={pill}>Indicadores</ResponsiveLink>

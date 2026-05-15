@@ -109,7 +109,7 @@ divergencias del frontend.
 - [x] Ampliar puertas giratorias: scanner BORME real — descarga PDFs de Sección A, extrae líneas `Nombramientos/Ceses`, fuzzy-match contra watchlist. Genera `source_type=primary` (confidence 0.65) en lugar del scanner de metadatos JSON anterior (que nunca encontraba nada).
 - [x] Declaraciones de actividades: pipeline implementado — URL determinista `/docinte/registro_intereses_diputado_{cod}.pdf`, tipo `actividades` en `economic_declarations`, frontend actualizado. Ingest completo: 350/350 diputados, 1149 declaraciones.
 - [x] Presupuestos Generales del Estado: ETL base implementado — jerarquía sección → programa → capítulo, 2016-2023 ingestados (~1.100-1.555 partidas/año). `program_name` enriquecido desde `estructura_funcional.csv`. Fuente: Civio scraper-pge. Frontend `/presupuestos` y `/presupuestos/[section]` desplegados.
-- [ ] Fondos UE trazados al receptor final — **pendiente de fuente confirmada** (ver "Problemas conocidos")
+- [x] Fondos UE trazados al receptor final — ETL Kohesio implementado. Entity ID de España en LOD graph: `Q7`. 72.344 beneficiarios ES, ESIF 2014-2027. Tabla `eu_funds`, vista `v_eu_funds_summary`, frontend `/fondos-ue`, cron semanal.
 - [x] Búsqueda global full-text: función RPC `search_global` (tsvector + unaccent) sobre 5 entidades; página `/buscar`; atajo ⌘K en header.
 - [x] Cobertura institucional — Gobierno: página `/gobierno` con vista `v_gobierno_actual`, gabinete completo con partido, gasto por ministerio y enlace a fichas de diputados.
 - [x] Home rediseñada como dashboard: búsqueda, snapshot del gobierno, votaciones recientes con badge de divergencias, puertas giratorias verificadas.
@@ -165,7 +165,7 @@ peor.
 - **Presupuestos 2020**: sin fuente disponible — España prorrogó el PGE 2018 en 2019 y 2020; Civio no publicó datos para ese año. Cobertura actual en web/DB: 2016-2026, con hueco en 2020.
 - **Presupuestos 2024-2026**: cargados desde el ROM de SEPG como `budget_type='prorroga'`. El PGE en vigor sigue siendo 2023 y la UI lo muestra explícitamente.
 - **Presupuestos 2027+**: pendiente de nueva fuente pública estructurada. Cuando SEPG publique nueva prórroga o proyecto, actualizar `BUDGET_YEAR_META` en `data.ts`, el registro de fuentes en `sources.py` y reingestar.
-- **Fondos UE — fuente pendiente de confirmar**: la fuente más prometedora es **Kohesio** (`kohesio.ec.europa.eu/api/beneficiaries`), portal EC con 678K+ beneficiarios ESIF 2014-2027. Tiene API JSON con `label`, `euBudget`, `numberProjects` por entidad. Problema bloqueante: el filtrado por país requiere el entity ID de España en el grafo LOD interno de Kohesio (`https://linkedopendata.eu/entity/Q???`) — no recuperable sin acceso a la interfaz web o documentación oficial de la API. Otras fuentes exploradas sin éxito: `fondoseuropeos.gob.es` (portal reestructurado, sin API), datos.gob.es (devuelve HTML en endpoints JSON), PRTR Spain (datos a nivel componente, no beneficiario). **Próximo paso**: navegar `kohesio.ec.europa.eu/en/beneficiaries?country=ES` en un navegador, inspeccionar la petición de red para extraer el entity URI correcto de España, y usarlo como parámetro `country=` en la API.
+- **Fondos UE — implementado**: fuente Kohesio (`kohesio.ec.europa.eu/api/beneficiaries`). Entity ID de España: `https://linkedopendata.eu/entity/Q7`. 72.344 beneficiarios ESIF 2014-2027. ETL semanal activo. Ver `src.kohesio.fondos_ue`.
 
 ---
 
@@ -185,6 +185,7 @@ peor.
   - `src.congreso.responsables`
   - `src.photos.run --no-refresh-missing --max-age-days 30`
   - `src.presupuestos.presupuestos --year $(date +%Y) --resume`
+  - `src.kohesio.fondos_ue`
 
 ---
 
@@ -218,4 +219,27 @@ peor.
 
 ---
 
-*Plan actualizado el 15 de mayo de 2026 (madrugada). Vertical TC/CGPJ/RTVE/SEPI completo.*
+---
+
+### Mejoras del 16 de mayo de 2026 — coherencia visual del fondo
+
+- [x] Causa raíz identificada: `--background` era crema amarillenta (`60 23% 97%`) y `--card` blanco puro — el tono rojizo dependía solo del gradiente radial en `top right`, que se veía mucho en páginas con contenido disperso (indicadores, diputados) y casi nada en páginas densas (subvenciones)
+- [x] `--background` cambiado a `15 22% 97%` (crema rosada) y `--card` a `15 10% 99%` — la base de color ya lleva el matiz rojizo de forma uniforme
+- [x] Gradiente del body cambiado de `circle at top right` a `ellipse 160% 80% at 90% 0%` — cubre todo el ancho con transición suave
+- [x] Card component: opacidad por defecto normalizada de `bg-card/95` a `bg-card/80`
+- [x] Eliminados ~25 overrides arbitrarios de opacidad (`/80`, `/85`, `/90`) en páginas y componentes — todos los Card usan ahora el default salvo excepciones intencionales (`hover:bg-card`, `bg-card/60`, `bg-card/70`)
+
+---
+
+---
+
+### Mejoras del 16 de mayo de 2026 — Fondos UE (Kohesio)
+
+- [x] Entity ID de España en el grafo LOD de Kohesio resuelto: `https://linkedopendata.eu/entity/Q7` (`countryCode=ES`)
+- [x] Migración `eu_funds` + vista `v_eu_funds_summary`
+- [x] ETL `src.kohesio.fondos_ue` — pagina 72.344 beneficiarios españoles ESIF 2014-2027, upsert con `--dry-run` y `--limit`
+- [x] Frontend `/fondos-ue` con StatGrid, lista paginada ordenada por fondo UE, enlace a Kohesio por beneficiario
+- [x] "Fondos UE" añadido al header desktop y menú móvil (grupo "Dinero público")
+- [x] Cron semanal añadido al CI (`src.kohesio.fondos_ue`)
+
+*Plan actualizado el 16 de mayo de 2026.*

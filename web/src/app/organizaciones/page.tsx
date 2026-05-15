@@ -1,0 +1,102 @@
+import Link from "next/link"
+import { PageHeader } from "@/components/domain/PageHeader"
+import { getOrganizationsList, parsePage } from "@/lib/data"
+
+export const revalidate = 3600
+
+interface PageProps {
+  searchParams: Promise<{ page?: string }>
+}
+
+export const metadata = { title: "Organizaciones" }
+
+export default async function OrganizacionesPage({ searchParams }: PageProps) {
+  const { page: pageParam } = await searchParams
+  const page = parsePage(pageParam)
+  const { organizations, total } = await getOrganizationsList(page)
+
+  const PAGE_SIZE = 50
+  const totalPages = Math.ceil(total / PAGE_SIZE)
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-6">
+      <PageHeader
+        title="Organizaciones"
+        description={`${total.toLocaleString("es-ES")} entidades enlazadas a contratos, subvenciones y puertas giratorias.`}
+      />
+
+      <div className="overflow-hidden rounded-xl border border-border/70 bg-card/80">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border/50 text-xs text-muted-foreground">
+              <th className="px-4 py-3 text-left font-medium">Organización</th>
+              <th className="hidden px-4 py-3 text-left font-medium sm:table-cell">Tipo</th>
+              <th className="px-4 py-3 text-right font-medium">Contratos</th>
+              <th className="hidden px-4 py-3 text-right font-medium md:table-cell">Subvenciones recibidas</th>
+              <th className="hidden px-4 py-3 text-right font-medium lg:table-cell">Puertas giratorias</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border/40">
+            {organizations.map((org) => (
+              <tr key={org.id} className="transition-colors hover:bg-muted/30">
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/organizaciones/${org.id}`}
+                    className="font-medium underline-offset-2 hover:underline"
+                  >
+                    {org.name}
+                  </Link>
+                  {org.sector && (
+                    <div className="text-xs text-muted-foreground">{org.sector}</div>
+                  )}
+                </td>
+                <td className="hidden px-4 py-3 text-muted-foreground sm:table-cell">
+                  {org.organization_type ?? "—"}
+                </td>
+                <td className="px-4 py-3 text-right tabular-nums">
+                  {org.contract_count > 0 ? org.contract_count.toLocaleString("es-ES") : "—"}
+                </td>
+                <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground md:table-cell">
+                  {org.subsidy_beneficiary_count > 0
+                    ? org.subsidy_beneficiary_count.toLocaleString("es-ES")
+                    : "—"}
+                </td>
+                <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground lg:table-cell">
+                  {org.revolving_door_count > 0 ? org.revolving_door_count : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between text-sm">
+          {page > 1 ? (
+            <Link
+              href={`?page=${page - 1}`}
+              className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+            >
+              ← Anterior
+            </Link>
+          ) : (
+            <span />
+          )}
+          <span className="text-xs text-muted-foreground">
+            Página {page} de {totalPages}
+          </span>
+          {page < totalPages ? (
+            <Link
+              href={`?page=${page + 1}`}
+              className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+            >
+              Siguiente →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

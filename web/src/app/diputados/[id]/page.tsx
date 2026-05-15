@@ -1,11 +1,14 @@
 import { supabase } from "@/lib/supabase/client"
 import { notFound } from "next/navigation"
 import { PoliticianProfile } from "@/components/politicians/PoliticianProfile"
-import { getPoliticianProfileData } from "@/lib/data"
+import { getPoliticianProfileData, getDeputyVotes, parsePage, PAGE_SIZE } from "@/lib/data"
 
 export const revalidate = 3600
 
-interface PageProps { params: Promise<{ id: string }> }
+interface PageProps {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ page?: string }>
+}
 
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params
@@ -13,18 +16,28 @@ export async function generateMetadata({ params }: PageProps) {
   return { title: data?.full_name || "Diputado" }
 }
 
-export default async function PoliticianPage({ params }: PageProps) {
+export default async function PoliticianPage({ params, searchParams }: PageProps) {
   const { id } = await params
+  const { page: pageParam } = await searchParams
+  const votePage = parsePage(pageParam)
 
-  const { pol, votes, totalVotes, powerRels, revolvingDoors, attendance, divergentSessionIds, govPosition, ministryContracts } =
-    await getPoliticianProfileData(id)
+  const [profile, pagedVotes] = await Promise.all([
+    getPoliticianProfileData(id),
+    votePage > 1 ? getDeputyVotes(id, votePage) : Promise.resolve(null),
+  ])
+
+  const { pol, votes, totalVotes, powerRels, revolvingDoors, attendance, divergentSessionIds, govPosition, ministryContracts } = profile
   if (!pol) notFound()
+
+  const displayVotes = pagedVotes ?? votes
 
   return (
     <PoliticianProfile
       pol={pol as Record<string, unknown>}
-      votes={votes as Record<string, unknown>[]}
+      votes={displayVotes as Record<string, unknown>[]}
       totalVotes={totalVotes}
+      votePage={votePage}
+      votePageSize={PAGE_SIZE.deputyVotes}
       powerRels={powerRels as Record<string, unknown>[]}
       revolvingDoors={revolvingDoors as Record<string, unknown>[]}
       attendance={attendance as { total_sessions: number; sessions_present: number; attendance_pct: number } | null}

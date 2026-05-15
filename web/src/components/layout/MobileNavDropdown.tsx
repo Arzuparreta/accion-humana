@@ -29,6 +29,8 @@ const navGroups: NavGroup[] = [
       { href: "/presupuestos", label: "Presupuestos" },
       { href: "/contratos", label: "Contratos públicos" },
       { href: "/subvenciones", label: "Subvenciones" },
+      { href: "/fondos-ue", label: "Fondos europeos" },
+      { href: "/organizaciones", label: "Organizaciones" },
     ],
   },
   {

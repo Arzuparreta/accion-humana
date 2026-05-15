@@ -7,6 +7,7 @@ const PHOTOS_CACHE_VERSION = "photos-v2"
 export const PAGE_SIZE = {
   votingSessions: 30,
   contracts: 50,
+  deputyVotes: 30,
 }
 
 export function parsePage(value: string | string[] | undefined) {
@@ -54,7 +55,7 @@ export const getHomeData = unstable_cache(
       supabase.from("voting_sessions").select("*", { count: "exact", head: true }),
       supabase
         .from("v_revolving_door_public")
-        .select("id, person_name, public_role, private_organization, sector")
+        .select("id, person_name, public_role, private_organization, sector, person_id")
         .order("id", { ascending: false })
         .limit(4),
       supabase
@@ -296,6 +297,35 @@ export const getPoliticianProfileData = unstable_cache(
     }
   },
   ["politician-profile-data", PHOTOS_CACHE_VERSION],
+  { revalidate: HOUR }
+)
+
+export const getDeputyVotes = unstable_cache(
+  async (id: string, page: number) => {
+    const offset = (page - 1) * PAGE_SIZE.deputyVotes
+    const { data } = await supabase
+      .from("votes")
+      .select("vote, voting_session_id, voting_sessions!inner(id, date, title, initiative_number)")
+      .eq("politician_id", id)
+      .order("date", { ascending: false, foreignTable: "voting_sessions" })
+      .range(offset, offset + PAGE_SIZE.deputyVotes - 1)
+    return data ?? []
+  },
+  ["deputy-votes", PHOTOS_CACHE_VERSION],
+  { revalidate: HOUR }
+)
+
+export const getOrganizationsList = unstable_cache(
+  async (page: number) => {
+    const offset = (page - 1) * 50
+    const { data, count } = await supabase
+      .from("v_organization_public")
+      .select("id, name, organization_type, sector, country, contract_count, subsidy_beneficiary_count, subsidy_granting_count, revolving_door_count", { count: "exact" })
+      .order("contract_count", { ascending: false, nullsFirst: false })
+      .range(offset, offset + 49)
+    return { organizations: data ?? [], total: count ?? 0 }
+  },
+  ["organizations-list"],
   { revalidate: HOUR }
 )
 
@@ -860,6 +890,51 @@ export interface SearchResult {
   subtitle: string
   url: string
 }
+
+export const PAGE_SIZE_EU_FUNDS = 50
+
+export interface EuFundRow {
+  id: string
+  label: string
+  eu_budget: number | null
+  total_budget: number | null
+  cofinancing_rate: number | null
+  number_projects: number | null
+  wikidata_link: string | null
+}
+
+export interface EuFundsSummary {
+  beneficiary_count: number
+  total_eu_budget: number
+  avg_cofinancing_rate: number
+  total_projects: number
+}
+
+export const getEuFundsPage = unstable_cache(
+  async (page: number) => {
+    const from = (page - 1) * PAGE_SIZE_EU_FUNDS
+    const to = from + PAGE_SIZE_EU_FUNDS - 1
+    const { data, count } = await supabase
+      .from("eu_funds")
+      .select("id, label, eu_budget, total_budget, cofinancing_rate, number_projects, wikidata_link", {
+        count: "exact",
+      })
+      .order("eu_budget", { ascending: false, nullsFirst: false })
+      .range(from, to)
+    return { funds: (data ?? []) as EuFundRow[], total: count ?? 0 }
+  },
+  ["eu-funds-page"],
+  { revalidate: HOUR * 24 }
+)
+
+export const getEuFundsSummary = unstable_cache(
+  async () => {
+    const { data } = await supabase.from("v_eu_funds_summary").select("*").single()
+    return (data ?? null) as EuFundsSummary | null
+  },
+  ["eu-funds-summary"],
+  { revalidate: HOUR * 24 }
+)
 
 export async function searchGlobal(query: string, maxPerType = 5): Promise<SearchResult[]> {
   if (!query || query.trim().length < 2) return []

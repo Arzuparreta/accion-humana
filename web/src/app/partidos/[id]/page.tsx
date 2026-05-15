@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { PoliticianCard } from "@/components/politicians/PoliticianCard"
 import { PageHeader } from "@/components/domain/PageHeader"
+import { StatGrid } from "@/components/domain/StatGrid"
 import { getPartyPageData } from "@/lib/data"
 import type { PoliticianWithMemberships } from "@/types"
 
@@ -18,8 +19,20 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function PartyPage({ params }: PageProps) {
   const { id } = await params
-  const { party, memberships } = await getPartyPageData(id)
+  const { party, memberships, stats } = await getPartyPageData(id)
   if (!party) notFound()
+
+  const statItems = [
+    { label: "Diputados activos", value: memberships.length, hint: "Escaños con membresía activa en la XV Legislatura." },
+    ...(stats
+      ? [
+          { label: "Asistencia media", value: `${stats.attendance_pct ?? "—"}%`, hint: "Promedio del grupo en votaciones nominales." },
+          { label: "Votos a favor", value: `${stats.pct_yes ?? "—"}%`, hint: "Porcentaje de votos 'Sí' sobre el total registrado." },
+          { label: "Votos en contra", value: `${stats.pct_no ?? "—"}%`, hint: "Porcentaje de votos 'No' sobre el total registrado." },
+          { label: "Abstenciones", value: `${stats.pct_abstain ?? "—"}%`, hint: "Porcentaje de abstenciones sobre el total registrado." },
+        ]
+      : []),
+  ]
 
   return (
     <div className="space-y-8">
@@ -34,9 +47,7 @@ export default async function PartyPage({ params }: PageProps) {
         }
       />
 
-      <p className="text-sm text-muted-foreground">
-        {memberships.length} diputado{memberships.length !== 1 ? "s" : ""} activo{memberships.length !== 1 ? "s" : ""} en la XV Legislatura.
-      </p>
+      <StatGrid items={statItems} />
 
       <div className="ui-grid-cards">
         {memberships.map((m) => {
