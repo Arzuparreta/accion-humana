@@ -824,6 +824,35 @@ export const getGobiernoActual = unstable_cache(
   { revalidate: HOUR * 24 }
 )
 
+export interface InstitucionMember {
+  id: string
+  institution: "TC" | "CGPJ" | "RTVE" | "SEPI"
+  position_title: string
+  person_name: string
+  political_party: string | null
+  nominating_body: string | null
+  appointment_date: string | null
+  source_url: string | null
+  party_color: string | null
+  photo_url: string | null
+  photo_variants: Record<string, string> | null
+  politician_id: string | null
+  has_revolving_door: boolean
+}
+
+export const getInstitucionesActuales = unstable_cache(
+  async () => {
+    const { data } = await supabase
+      .from("v_instituciones_actuales")
+      .select(
+        "id, institution, position_title, person_name, political_party, nominating_body, appointment_date, source_url, party_color, photo_url, photo_variants, politician_id, has_revolving_door"
+      )
+    return (data ?? []) as InstitucionMember[]
+  },
+  ["instituciones-actuales"],
+  { revalidate: HOUR * 24 }
+)
+
 export interface SearchResult {
   entity_type: "politician" | "organization" | "voting_session" | "contract" | "revolving_door"
   id: string

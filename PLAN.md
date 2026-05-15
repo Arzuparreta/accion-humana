@@ -114,7 +114,7 @@ divergencias del frontend.
 - [x] Cobertura institucional — Gobierno: página `/gobierno` con vista `v_gobierno_actual`, gabinete completo con partido, gasto por ministerio y enlace a fichas de diputados.
 - [x] Home rediseñada como dashboard: búsqueda, snapshot del gobierno, votaciones recientes con badge de divergencias, puertas giratorias verificadas.
 - [ ] Senado — datos abiertos evaluados: no tiene API equivalente al Congreso. Pendiente de scraping HTML o fuente alternativa.
-- [ ] Más cobertura institucional: Tribunal Constitucional, CGPJ, RTVE, SEPI — nombramientos políticos con trazabilidad. Próximo candidato natural para el vertical de revolving door.
+- [x] Cobertura institucional: Tribunal Constitucional, CGPJ, RTVE, SEPI — 63 nombramientos activos con partido, organismo proponente y fuente BOE. Página `/instituciones` con cross-link a puertas giratorias.
 
 ### Mejoras recientes del 15 mayo 2026
 
@@ -206,4 +206,16 @@ peor.
 
 ---
 
-*Plan actualizado el 15 de mayo de 2026 (noche). Refleja sprint de consolidación: tests de humo, metadatos YAML y verificación del scanner BORME.*
+### Mejoras del 15 de mayo de 2026 (sesión madrugada — vertical institucional)
+
+- [x] Tabla `institutional_appointments` + vista `v_instituciones_actuales` (con cross-link revolving door)
+- [x] YAML `instituciones_nombramientos.yml` con 63 entradas reales: 12 TC, 21 CGPJ, 15 RTVE, 15 SEPI (datos BOE verificados)
+- [x] ETL `src.instituciones.instituciones` — upsert desde YAML con fuzzy-match a `politicians`
+- [x] Frontend `/instituciones` — StatGrid + secciones por organismo + badges de partido + cross-link puertas giratorias
+- [x] Enlace "Instituciones" añadido al header y menú móvil
+- [x] Tests `test_instituciones.py` — 101/101 pasan (incluidos los 3 con YAML real)
+- [x] ETL semanal añadido al CI (`src.instituciones.instituciones`)
+
+---
+
+*Plan actualizado el 15 de mayo de 2026 (madrugada). Vertical TC/CGPJ/RTVE/SEPI completo.*

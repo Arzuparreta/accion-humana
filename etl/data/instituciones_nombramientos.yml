@@ -1,0 +1,608 @@
+# Nombramientos activos en TC, CGPJ, RTVE y SEPI.
+#
+# Convenciones:
+#  - `person`: "Apellidos, Nombre" (formato Congreso).
+#  - `party`: partido que respaldó la candidatura en el órgano proponente.
+#    Para SEPI: el Gobierno actual (PSOE en coalición con Sumar) designa por RD.
+#  - `nominating_body`: Congreso, Senado, CGPJ o Gobierno.
+#  - Fechas ISO. `end: null` = en activo (incluye quienes siguen por prórroga).
+#  - `source`: URL del BOE o web oficial de referencia.
+#
+# Cadencia de revisión: actualizar tras cada nombramiento en BOE.
+# Última verificación: 2026-05-15
+# Fuentes: BOE, tribunalconstitucional.es, poderjudicial.es, Wikipedia, prensa.
+
+appointments:
+
+  # ── TC — Tribunal Constitucional ──────────────────────────────────────────
+  # 12 magistrados. Mandato 9 años. Sistema: 4×Congreso, 4×Senado, 2×CGPJ, 2×Gobierno.
+  # Nota: mandatos de Conde-Pumpido, Balaguer, Enríquez (y Macías, nominado 2024)
+  # expiraron o están próximos, pero la renovación está bloqueada como 2026-05-15.
+
+  - institution: TC
+    position_title: Presidente
+    person: "Conde-Pumpido Tourón, Cándido"
+    party: PSOE
+    nominating_body: Senado
+    start: 2017-03-15
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2017-2634"
+
+  - institution: TC
+    position_title: Vicepresidenta
+    person: "Montalbán Huertas, Inmaculada"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2021-11-18
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2021-18901"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Enríquez Sancho, Ricardo"
+    party: PP
+    nominating_body: Senado
+    start: 2017-03-15
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2017-2634"
+
+  - institution: TC
+    position_title: Magistrada
+    person: "Balaguer Callejón, María Luisa"
+    party: PSOE
+    nominating_body: Senado
+    start: 2017-03-15
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2017-2634"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Sáez Valcárcel, Juan Ramón"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2021-11-18
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2021-18901"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Arnaldo Alcubilla, Enrique"
+    party: PP
+    nominating_body: Congreso
+    start: 2021-11-18
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2021-18901"
+
+  - institution: TC
+    position_title: Magistrada
+    person: "Espejel Jorquera, Concepción"
+    party: PP
+    nominating_body: Congreso
+    start: 2021-11-18
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2021-18901"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Campo Moreno, Juan Carlos"
+    party: PSOE
+    nominating_body: Gobierno
+    start: 2023-01-09
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-1407"
+
+  - institution: TC
+    position_title: Magistrada
+    person: "Díez Bueso, Laura"
+    party: PSOE
+    nominating_body: Gobierno
+    start: 2023-01-09
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-1407"
+
+  - institution: TC
+    position_title: Magistrada
+    person: "Segoviano Astaburuaga, María Luisa"
+    party:
+    nominating_body: CGPJ
+    start: 2023-01-09
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-1407"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Tolosa Tribiño, César"
+    party: PP
+    nominating_body: CGPJ
+    start: 2023-01-09
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-1407"
+
+  - institution: TC
+    position_title: Magistrado
+    person: "Macías Castaño, José María"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-30
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15661"
+
+  # ── CGPJ — Consejo General del Poder Judicial ──────────────────────────────
+  # 20 vocales + 1 presidente. Mandato 5 años.
+  # Renovado en 2024 tras 5 años de bloqueo (acuerdo PP-PSOE).
+  # Toma de posesión: 25 de julio de 2024.
+  # Presidenta elegida internamente: 3 de septiembre de 2024.
+
+  - institution: CGPJ
+    position_title: Presidenta
+    person: "Perelló Doménech, Isabel"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-09-03
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-17786"
+
+  # Vocales jueces — elegidos por Congreso
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Arozamena Laso, Ángel Ramón"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Erice Martínez, María Esther"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Fernández Seijo, José María"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Páez Martínez-Virel, José María"
+    party: PP
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Orga Larrés, José Carlos"
+    party: PP
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Espinosa Conde, María Gema"
+    party:
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  # Vocales jueces — elegidos por Senado
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Preciado Domenech, Carlos Hugo"
+    party: SUMAR
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Avilés Palacios, Lucía"
+    party: PSOE
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Montero Fernández, José Antonio"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Martínez Mediavilla, José Eduardo"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Rojo Beltrán, María Pilar Esther"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Abascal Junquera, Alejandro"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  # Vocales juristas — elegidos por Congreso
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Herreros Hernández, Inés María"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Queralt Jiménez, Argelia"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Costa Pillado, José Luis"
+    party: PP
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Jiménez Bados, Pilar"
+    party: PP
+    nominating_body: Congreso
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15351"
+
+  # Vocales juristas — elegidos por Senado
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Bodas Martín, Ricardo"
+    party: PSOE
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Fernández Pérez, Bernardo"
+    party: PSOE
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Martín Contreras, Luis"
+    party: PSOE
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  - institution: CGPJ
+    position_title: Vocal
+    person: "Revuelta Pérez, Isabel"
+    party: PP
+    nominating_body: Senado
+    start: 2024-07-25
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-15352"
+
+  # ── RTVE — Corporación de Radio y Televisión Española ─────────────────────
+  # Consejo de administración ampliado a 15 miembros en 2024 (antes 10).
+  # Nombramientos: 21 de noviembre de 2024.
+  # Presidente elegido por el propio consejo.
+
+  - institution: RTVE
+    position_title: Presidente
+    person: "López Rodríguez, José Pablo"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "León Castillo, Rosa"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "de la Mata Crespo, Esther"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "Rubio Arostegui, Angélica"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "de Pablos Candón, Mercedes"
+    party: PSOE
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Jareño Ruiz, Eladio"
+    party: PP
+    nominating_body: Senado
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Moreno Palanques, Rubén"
+    party: PP
+    nominating_body: Senado
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "Vila Menor, Marina"
+    party: PP
+    nominating_body: Senado
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Ruiz Jarabo, Ignacio"
+    party: PP
+    nominating_body: Senado
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "Martín Blanco, María Teresa"
+    party: SUMAR
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "Ribas Freixas, Marta"
+    party: SUMAR
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Calçada Olliveras, Miquel"
+    party: JUNTS
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Sol Ordis, Sergi"
+    party: ERC
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejero
+    person: "Muniesa Villanueva, Mariano"
+    party: PODEMOS
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  - institution: RTVE
+    position_title: Consejera
+    person: "Solana Zubiría, María Roncesvalles"
+    party: PNV
+    nominating_body: Congreso
+    start: 2024-11-21
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-23580"
+
+  # ── SEPI — Sociedad Estatal de Participaciones Industriales ───────────────
+  # Consejo de administración designado por Consejo de Ministros (Gobierno).
+  # Presidenta: Real Decreto 218/2021, de 30 de marzo.
+  # Nota: todos los consejeros son designados por el Gobierno en funciones de
+  # accionista. Party = PSOE por ser el partido del Gobierno que los designó.
+
+  - institution: SEPI
+    position_title: Presidenta
+    person: "Gualda González, María Belén"
+    party: PSOE
+    nominating_body: Gobierno
+    start: 2021-03-30
+    end:
+    source: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2021-5155"
+
+  - institution: SEPI
+    position_title: Vicepresidente
+    person: "Lora Toro, Bartolomé"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejera
+    person: "Valcarce García, María Amparo"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Gascón Catalán, Jesús"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "García Brustenga, Jordi"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Groizard Payeras, Joan"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Arroyo Martínez, Israel"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejera
+    person: "Sánchez Milán, Lidia"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejera
+    person: "Rodrigo Ibáñez, Sonia"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Guerra Posadas, Rafael"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "del Prado Cortés, José Ramón"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Abati García-Manso, Ernesto"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Herrera Rodríguez, Alberto"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejera
+    person: "López Senovilla, Amparo"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
+
+  - institution: SEPI
+    position_title: Consejero
+    person: "Tejedor Carnero, Juan"
+    party: PSOE
+    nominating_body: Gobierno
+    start:
+    end:
+    source: "https://www.sepi.es/es/quienes-somos/organos-de-direccion"
