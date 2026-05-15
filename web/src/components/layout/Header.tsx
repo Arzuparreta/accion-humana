@@ -1,6 +1,7 @@
 import { LogoMark } from "@/components/brand/LogoMark"
 import { MobileNavDropdown } from "@/components/layout/MobileNavDropdown"
 import { ResponsiveLink } from "@/components/navigation/NavigationProgress"
+import { SearchTrigger } from "@/components/search/SearchTrigger"
 import { BRAND_NAME, GITHUB_URL } from "@/lib/brand"
 
 const pill = "rounded-full border border-border/60 bg-card px-3 py-2 text-center text-xs text-muted-foreground transition-colors hover:text-foreground"
@@ -39,6 +40,8 @@ export function Header() {
             {/* Contexto */}
             <ResponsiveLink href="/indicadores" prefetch className={pill}>Indicadores</ResponsiveLink>
             <ResponsiveLink href="/puertas-giratorias" prefetch className={pill}>Puertas giratorias</ResponsiveLink>
+            {/* Búsqueda */}
+            <SearchTrigger />
             {/* GitHub: icono sin texto */}
             <a
               href={GITHUB_URL}

@@ -688,3 +688,20 @@ export const getMoneyDatasetSummary = unstable_cache(
   ["money-dataset-summary"],
   { revalidate: HOUR }
 )
+
+export interface SearchResult {
+  entity_type: "politician" | "organization" | "voting_session" | "contract" | "revolving_door"
+  id: string
+  title: string
+  subtitle: string
+  url: string
+}
+
+export async function searchGlobal(query: string, maxPerType = 5): Promise<SearchResult[]> {
+  if (!query || query.trim().length < 2) return []
+  const { data } = await supabase.rpc("search_global", {
+    query_text: query.trim(),
+    max_per_type: maxPerType,
+  })
+  return (data ?? []) as SearchResult[]
+}
