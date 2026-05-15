@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache"
 import { supabase } from "@/lib/supabase/client"
 
 const HOUR = 3600
+const PHOTOS_CACHE_VERSION = "photos-v2"
 
 export const PAGE_SIZE = {
   votingSessions: 30,
@@ -37,7 +38,7 @@ export const getHomeData = unstable_cache(
       sessionsCount: sessionsCount.count ?? 0,
     }
   },
-  ["home-data"],
+  ["home-data", PHOTOS_CACHE_VERSION],
   { revalidate: HOUR }
 )
 
@@ -53,7 +54,7 @@ export const getDeputyCards = unstable_cache(
 
     return data ?? []
   },
-  ["deputy-cards"],
+  ["deputy-cards", PHOTOS_CACHE_VERSION],
   { revalidate: HOUR }
 )
 
@@ -85,7 +86,7 @@ export const getPartyPageData = unstable_cache(
       memberships: memberships.data ?? [],
     }
   },
-  ["party-page-data"],
+  ["party-page-data", PHOTOS_CACHE_VERSION],
   { revalidate: HOUR }
 )
 
@@ -194,7 +195,7 @@ export const getPoliticianProfileData = unstable_cache(
       attendance: attendance.data,
     }
   },
-  ["politician-profile-data"],
+  ["politician-profile-data", PHOTOS_CACHE_VERSION],
   { revalidate: HOUR }
 )
 
