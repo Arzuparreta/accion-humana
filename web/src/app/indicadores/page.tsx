@@ -8,6 +8,11 @@ import { getIndicators } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Indicadores económicos",
+  description: "Series del INE: IPC, PIB, EPA, deuda pública y otras magnitudes macroeconómicas.",
+}
+
 export default async function IndicadoresPage() {
   const rows = await getIndicators()
 

@@ -9,6 +9,11 @@ import { getPartyColor } from "@/lib/domain-style"
 
 export const revalidate = 3600 * 6
 
+export const metadata = {
+  title: "Senado",
+  description: "Senadoras y senadores en activo: partido, fuente oficial y enlace a su ficha en el Senado.",
+}
+
 function formatName(raw: string): string {
   return raw
     .split(",")

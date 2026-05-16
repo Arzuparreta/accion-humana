@@ -3,6 +3,11 @@ import { DistorsionTabs } from "@/components/distorsion/DistorsionTabs"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Divergencias",
+  description: "Diputados que votaron distinto a la mayoría de su grupo parlamentario, sesión por sesión.",
+}
+
 const ELECTION_2023 = {
   date: "23 de julio de 2023",
   totalSeats: 350,

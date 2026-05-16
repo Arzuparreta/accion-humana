@@ -8,6 +8,11 @@ import { getPartyColor } from "@/lib/domain-style"
 
 export const revalidate = 3600 * 24
 
+export const metadata = {
+  title: "Gobierno",
+  description: "Composición actual del Gobierno de España: ministras y ministros, partido, ministerio y enlace a su ficha pública.",
+}
+
 const POSITION_LABEL: Record<string, string> = {
   presidente_gobierno: "Presidencia del Gobierno",
   vicepresidente: "Vicepresidencias",
