@@ -1,12 +1,13 @@
 "use client"
 
-import { Fragment } from "react"
 import { LogoMark } from "@/components/brand/LogoMark"
 import { MobileNavDropdown } from "@/components/layout/MobileNavDropdown"
 import { ResponsiveLink } from "@/components/navigation/NavigationProgress"
 import { SearchTrigger } from "@/components/search/SearchTrigger"
 import { BRAND_NAME } from "@/lib/brand"
 import { cn } from "@/lib/utils"
+import { Menu } from "@base-ui/react/menu"
+import { Menubar } from "@base-ui/react/menubar"
 import { usePathname } from "next/navigation"
 
 const navGroups = [
@@ -22,7 +23,7 @@ const navGroups = [
     ],
   },
   {
-    label: "Dinero",
+    label: "Dinero público",
     items: [
       { href: "/presupuestos", label: "Presupuestos" },
       { href: "/contratos", label: "Contratos" },
@@ -35,26 +36,36 @@ const navGroups = [
     label: "Contexto",
     items: [
       { href: "/indicadores", label: "Indicadores" },
-      { href: "/puertas-giratorias", label: "P. giratorias" },
+      { href: "/puertas-giratorias", label: "Puertas giratorias" },
     ],
   },
 ] as const
 
-const navLinkBase =
-  "relative inline-flex shrink-0 items-center text-[12.5px] font-semibold tracking-tight text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
-const navLinkActive =
-  "text-foreground after:absolute after:-bottom-[15px] after:left-0 after:right-0 after:h-[2px] after:bg-foreground"
+const triggerBase =
+  "relative inline-flex h-9 shrink-0 items-center gap-1 rounded-md px-3 text-[13px] font-semibold tracking-tight text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:bg-muted focus-visible:text-foreground data-popup-open:bg-muted data-popup-open:text-foreground"
+
+const triggerActive =
+  "text-foreground after:absolute after:-bottom-[11px] after:left-3 after:right-3 after:h-[2px] after:bg-foreground"
+
+const itemBase =
+  "block cursor-pointer select-none rounded px-3 py-2 text-[13.5px] font-medium tracking-tight text-foreground/80 outline-none transition-colors data-highlighted:bg-muted data-highlighted:text-foreground"
+
+const itemActive = "text-foreground"
 
 export function Header() {
   const pathname = usePathname()
 
-  function isActive(href: string) {
+  function isItemActive(href: string) {
     return pathname === href || (href !== "/" && pathname?.startsWith(href))
+  }
+
+  function isGroupActive(items: ReadonlyArray<{ href: string }>) {
+    return items.some((item) => isItemActive(item.href))
   }
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
-      <div className="flex h-14 w-full items-center gap-4 px-4 sm:px-6 lg:gap-5">
+      <div className="flex h-14 w-full items-center gap-4 px-4 sm:px-6 lg:gap-6">
         <ResponsiveLink
           href="/"
           prefetch
@@ -68,30 +79,51 @@ export function Header() {
           </span>
         </ResponsiveLink>
 
-        <nav className="hidden min-w-0 flex-1 items-center gap-x-2.5 lg:flex 2xl:gap-x-4">
-          {navGroups.map((group, gi) => (
-            <Fragment key={group.label}>
-              {gi > 0 && (
-                <span className="h-4 w-px shrink-0 bg-border" aria-hidden />
-              )}
-              {group.items.map((item) => (
-                <ResponsiveLink
-                  key={item.href}
-                  href={item.href}
-                  prefetch
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={cn(navLinkBase, isActive(item.href) && navLinkActive)}
+        <Menubar className="hidden min-w-0 flex-1 items-center gap-1 lg:flex" modal={false}>
+          {navGroups.map((group) => {
+            const active = isGroupActive(group.items)
+            return (
+              <Menu.Root key={group.label} modal={false}>
+                <Menu.Trigger
+                  className={cn(triggerBase, active && triggerActive)}
+                  aria-current={active ? "page" : undefined}
                 >
-                  {item.label}
-                </ResponsiveLink>
-              ))}
-            </Fragment>
-          ))}
-        </nav>
+                  {group.label}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-3 w-3 opacity-60 transition-transform duration-150 data-popup-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+                  </svg>
+                </Menu.Trigger>
+                <Menu.Portal>
+                  <Menu.Positioner sideOffset={10} align="start" className="z-50">
+                    <Menu.Popup className="min-w-[200px] rounded-md border border-border bg-popover p-1 shadow-lg outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95">
+                      {group.items.map((item) => (
+                        <Menu.LinkItem
+                          key={item.href}
+                          closeOnClick
+                          className={cn(itemBase, isItemActive(item.href) && itemActive)}
+                          render={<ResponsiveLink href={item.href} prefetch />}
+                        >
+                          {item.label}
+                        </Menu.LinkItem>
+                      ))}
+                    </Menu.Popup>
+                  </Menu.Positioner>
+                </Menu.Portal>
+              </Menu.Root>
+            )
+          })}
+        </Menubar>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1">
-          <div className="hidden items-center gap-1 lg:flex">
-            <SearchTrigger />
+        <div className="ml-auto flex shrink-0 items-center gap-2">
+          <div className="hidden lg:flex">
+            <SearchTrigger variant="pill" />
           </div>
           <MobileNavDropdown />
         </div>
