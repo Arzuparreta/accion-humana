@@ -9,6 +9,11 @@ import { getPartyColor } from "@/lib/domain-style"
 
 export const revalidate = 3600 * 24
 
+export const metadata = {
+  title: "Instituciones",
+  description: "Nombramientos en Tribunal Constitucional, CGPJ, RTVE y SEPI: persona, organismo proponente y fuente BOE.",
+}
+
 const INSTITUTION_META: Record<
   string,
   { label: string; description: string; nominating: string }

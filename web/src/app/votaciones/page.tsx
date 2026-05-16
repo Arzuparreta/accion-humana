@@ -9,6 +9,11 @@ import { PAGE_SIZE, getVotingSessionPage, parsePage } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Votaciones",
+  description: "Sesiones de votación del Congreso: resultados, asistencia y divergencias dentro de cada grupo.",
+}
+
 interface SessionRow {
   id: string
   title: string

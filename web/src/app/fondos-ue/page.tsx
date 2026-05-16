@@ -12,6 +12,11 @@ import {
 
 export const revalidate = 3600 * 24
 
+export const metadata = {
+  title: "Fondos UE",
+  description: "Beneficiarios españoles de los Fondos Estructurales y de Inversión Europeos 2014-2027, según Kohesio.",
+}
+
 interface PageProps {
   searchParams?: { page?: string }
 }

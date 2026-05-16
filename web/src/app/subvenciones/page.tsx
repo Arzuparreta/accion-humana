@@ -7,6 +7,11 @@ import { PAGE_SIZE_SUBSIDIES, getMoneyDatasetSummary, getSubvencionPage, getSubv
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Subvenciones",
+  description: "Subvenciones públicas concedidas a organizaciones: importe, fecha, administración convocante y beneficiario.",
+}
+
 const VALID_NIVELES = ["all", "ESTADO", "AUTONOMICA", "LOCAL"]
 
 interface PageProps {

@@ -5,6 +5,11 @@ import { getDeputyCards } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Diputados",
+  description: "Diputados en activo de la XV Legislatura: partido, circunscripción, historial de voto y trayectoria pública.",
+}
+
 export default async function DiputadosPage() {
   const politicians = await getDeputyCards()
 

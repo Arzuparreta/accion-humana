@@ -5,6 +5,11 @@ import { getMoneyDataOverview, getEtlPipelineStatus } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Estado de los datos",
+  description: "Cobertura, frescura y fuentes de cada vertical del portal: votaciones, contratos, subvenciones, presupuestos y más.",
+}
+
 function formatDate(value: string | null) {
   if (!value) return "—"
   return new Date(value).toLocaleDateString("es-ES", {

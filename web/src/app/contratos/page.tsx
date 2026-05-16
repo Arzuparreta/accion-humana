@@ -7,6 +7,11 @@ import { PAGE_SIZE, getContractPage, getContractPageFiltered, getMoneyDatasetSum
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Contratos públicos",
+  description: "Adjudicaciones del sector público español: importe, contratista, tipo y administración responsable.",
+}
+
 interface PageProps {
   searchParams?: {
     page?: string

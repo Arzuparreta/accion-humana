@@ -3,6 +3,11 @@ import { getRevolvingDoorCases } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Puertas giratorias",
+  description: "Casos verificados de paso entre cargo público y actividad privada, con persona, organización y fuente pública.",
+}
+
 export interface RDCase {
   id: string
   person_name: string

@@ -7,6 +7,11 @@ import { BUDGET_YEARS, getBudgetYearMeta, getBudgetSummary } from "@/lib/data"
 
 export const revalidate = 3600
 
+export const metadata = {
+  title: "Presupuestos del Estado",
+  description: "Presupuestos Generales del Estado por sección, programa y capítulo desde 2016.",
+}
+
 interface PageProps {
   searchParams?: {
     year?: string
