@@ -18,8 +18,14 @@ interface PageProps {
 interface VoteRow {
   vote: string
   politician_id: string | null
-  politician: { id: string; full_name: string } | null
-  membership: { party: { id: string; acronym: string; color: string } } | null
+  politician: {
+    id: string
+    full_name: string
+    politician_memberships: Array<{
+      is_active: boolean
+      party: { id: string; acronym: string; color: string }
+    }>
+  } | null
 }
 
 export default async function VotacionPage({ params }: PageProps) {
@@ -40,7 +46,8 @@ export default async function VotacionPage({ params }: PageProps) {
   > = {}
 
   for (const vote of (votes as unknown as VoteRow[]) || []) {
-    const party = vote.membership?.party
+    const activeMembership = vote.politician?.politician_memberships?.find(m => m.is_active)
+    const party = activeMembership?.party
     if (!party) continue
     const key = party.acronym
     if (!partyGroups[key]) {

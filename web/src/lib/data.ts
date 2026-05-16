@@ -276,10 +276,9 @@ export const getVotingDetailData = unstable_cache(
       supabase
         .from("votes")
         .select(
-          "vote, politician_id, politician:politicians(id, full_name), membership:politician_memberships!inner(party:parties(id, acronym, color))"
+          "vote, politician_id, politician:politicians(id, full_name, politician_memberships(is_active, party:parties(id, acronym, color)))"
         )
-        .eq("voting_session_id", id)
-        .eq("membership.is_active", true),
+        .eq("voting_session_id", id),
     ])
 
     return {
