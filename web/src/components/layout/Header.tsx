@@ -10,7 +10,7 @@ const divider = <span className="h-4 w-px shrink-0 bg-border/60" aria-hidden />
 export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur">
-      <div className="ui-shell flex min-h-14 flex-row items-center justify-between gap-3 py-3 sm:min-h-16">
+      <div className="flex min-h-14 flex-row items-center justify-between gap-3 px-4 py-3 sm:min-h-16 sm:px-6">
         <ResponsiveLink href="/" prefetch className="flex min-w-0 items-center gap-3 group">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-primary/15 bg-primary text-primary-foreground shadow-sm transition-colors group-hover:bg-foreground sm:h-11 sm:w-11">
             <LogoMark className="h-7 w-7" variant="inverse" />
