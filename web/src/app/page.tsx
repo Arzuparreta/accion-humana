@@ -64,7 +64,6 @@ export default async function HomePage() {
     recentSessions,
     revolvingDoorCases,
     gobierno,
-    contractsTotalAmount,
     featuredContract,
     featuredContractIsRecent,
     featuredSession,
@@ -87,13 +86,13 @@ export default async function HomePage() {
       <LogoHero parties={parties ?? []} />
 
       {/* Hero: dato de impacto */}
-      {contractsTotalAmount != null && contractsTotalAmount > 0 && (
+      {contractCount > 0 && (
         <section className="rounded-2xl border border-border/60 bg-card/60 px-6 py-8 sm:px-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Importe total de contratos públicos adjudicados
+            Licitaciones publicadas en el sector público español
           </p>
           <p className="mt-2 text-4xl font-extrabold tabular-nums tracking-tight sm:text-5xl">
-            {formatBig(contractsTotalAmount)}
+            {contractCount.toLocaleString("es-ES")}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             Fuente: Plataforma de Contratación del Sector Público (PCSP) · Ministerio de Hacienda
@@ -102,7 +101,7 @@ export default async function HomePage() {
             href="/contratos"
             className="mt-4 inline-block text-sm font-medium underline underline-offset-4 hover:text-foreground"
           >
-            Ver todos los contratos →
+            Ver contratos por importe →
           </ResponsiveLink>
         </section>
       )}

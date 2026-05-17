@@ -70,7 +70,6 @@ export const getHomeData = unstable_cache(
       sessionCount,
       revolvingDoorCases,
       gobierno,
-      contractsTotal,
       featuredContractRecent,
       featuredSession,
       featuredSubsidyRecent,
@@ -107,8 +106,6 @@ export const getHomeData = unstable_cache(
         .select("id, person_name, organization_name, political_party, party_color, politician_id, position_type")
         .in("position_type", ["presidente_gobierno", "vicepresidente"])
         .limit(6),
-      // Hero: total importe de contratos adjudicados
-      supabase.from("contracts").select("amount.sum()").single(),
       // Tarjeta contrato: mayor importe últimos 30 días
       supabase
         .from("contracts")
@@ -168,10 +165,6 @@ export const getHomeData = unstable_cache(
     const featuredSubsidy = featuredSubsidyRecent.data ?? featuredSubsidyAllTime.data
     const featuredSubsidyIsRecent = !!featuredSubsidyRecent.data
 
-    // SUM(amount) result shape: { amount: { sum: number } }
-    const contractsTotalAmount: number | null =
-      (contractsTotal.data as unknown as { amount: { sum: number } } | null)?.amount?.sum ?? null
-
     return {
       politicians: politicians.data ?? [],
       politicianCount: politicianCount.count ?? 0,
@@ -190,7 +183,6 @@ export const getHomeData = unstable_cache(
       recentSessions: recentSessions.data ?? [],
       revolvingDoorCases: revolvingDoorCases.data ?? [],
       gobierno: gobierno.data ?? [],
-      contractsTotalAmount,
       featuredContract,
       featuredContractIsRecent,
       featuredSession: featuredSession.data ?? null,
