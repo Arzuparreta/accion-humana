@@ -147,7 +147,7 @@ export function IndicatorChart({
             stroke="currentColor"
             strokeWidth={variant === "stage" ? 2.5 : 2}
             fill={`url(#${gradientId})`}
-            className={variant === "stage" ? "text-white" : "text-foreground"}
+            className="text-foreground"
             animationDuration={1100}
           />
         </AreaChart>

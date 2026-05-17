@@ -1,6 +1,7 @@
 import { EmptyState } from "@/components/domain/EmptyState"
 import { InfoPanel } from "@/components/domain/InfoPanel"
 import { PageHeader } from "@/components/domain/PageHeader"
+import { IndicatorsBackdrop } from "@/components/indicators/IndicatorsBackdrop"
 import { IndicatorsDashboard, type IndicatorSummary } from "@/components/indicators/IndicatorsDashboard"
 import { getIndicators } from "@/lib/data"
 
@@ -60,21 +61,24 @@ export default async function IndicadoresPage() {
     .sort((a, b) => a.name.localeCompare(b.name, "es"))
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <PageHeader
-        title="Indicadores económicos"
-        description="Series históricas del Instituto Nacional de Estadística (INE). IPC, PIB, EPA, deuda pública y otros indicadores económicos."
-      />
+    <>
+      <IndicatorsBackdrop />
+      <div className="relative z-10 mx-auto max-w-6xl space-y-6">
+        <PageHeader
+          title="Indicadores económicos"
+          description="Series históricas del Instituto Nacional de Estadística (INE). IPC, PIB, EPA, deuda pública y otros indicadores económicos."
+        />
 
-      {indicators.length === 0 ? (
-        <EmptyState title="Sin indicadores" description="Ejecuta el ETL del INE." />
-      ) : (
-        <IndicatorsDashboard indicators={indicators} totalObservations={rows.length} />
-      )}
+        {indicators.length === 0 ? (
+          <EmptyState title="Sin indicadores" description="Ejecuta el ETL del INE." />
+        ) : (
+          <IndicatorsDashboard indicators={indicators} totalObservations={rows.length} />
+        )}
 
-      <InfoPanel title="Fuente">
-        INE (Instituto Nacional de Estadística). Datos actualizados mensualmente vía API JSON.
-      </InfoPanel>
-    </div>
+        <InfoPanel title="Fuente">
+          INE (Instituto Nacional de Estadística). Datos actualizados mensualmente vía API JSON.
+        </InfoPanel>
+      </div>
+    </>
   )
 }

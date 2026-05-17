@@ -66,22 +66,22 @@ export function IndicatorsDashboard({ indicators, totalObservations }: Indicator
 
   return (
     <div className="space-y-5">
-      <section className="overflow-hidden rounded-xl border border-border/80 bg-[radial-gradient(circle_at_10%_0%,hsl(var(--brand-signal)/0.24),transparent_34%),linear-gradient(135deg,#f7f4ef_0%,#d8d8d3_42%,#171717_100%)] p-4 text-white shadow-sm sm:p-5">
+      <section className="hidden overflow-hidden rounded-xl border border-border/80 bg-card/80 p-4 shadow-sm sm:block sm:p-5">
         <div className="grid gap-3 sm:grid-cols-4">
-          <div className="rounded-lg border border-white/15 bg-black/20 px-3 py-3 backdrop-blur">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/62">Series</div>
+          <div className="rounded-lg border border-border/70 bg-background/60 px-3 py-3">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Series</div>
             <div className="mt-1 font-display text-3xl font-semibold tracking-tight">{indicators.length}</div>
           </div>
-          <div className="rounded-lg border border-white/15 bg-black/20 px-3 py-3 backdrop-blur">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/62">Observaciones</div>
+          <div className="rounded-lg border border-border/70 bg-background/60 px-3 py-3">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Observaciones</div>
             <div className="mt-1 font-display text-3xl font-semibold tracking-tight">{totalObservations}</div>
           </div>
-          <div className="rounded-lg border border-white/15 bg-black/20 px-3 py-3 backdrop-blur">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/62">Último periodo</div>
+          <div className="rounded-lg border border-border/70 bg-background/60 px-3 py-3">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Último periodo</div>
             <div className="mt-1 font-display text-3xl font-semibold tracking-tight">{latestPeriod ?? "N/D"}</div>
           </div>
-          <div className="rounded-lg border border-white/15 bg-black/20 px-3 py-3 backdrop-blur">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/62">Fuente</div>
+          <div className="rounded-lg border border-border/70 bg-background/60 px-3 py-3">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Fuente</div>
             <div className="mt-1 font-display text-3xl font-semibold tracking-tight">INE</div>
           </div>
         </div>
