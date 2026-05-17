@@ -64,6 +64,42 @@ def test_parse_entry_normalizes_awarding_body():
     assert "HACIENDA" in record["awarding_body_normalized"]
 
 
+def test_parse_entry_extracts_contractor():
+    entry = _load_entry()
+    record = parse_entry(entry)
+    assert record["contractor"] == "Empresa Adjudicataria S.L."
+
+
+def test_parse_entry_contractor_none_when_no_tender_result():
+    # Entry without TenderResult should have contractor=None
+    import xml.etree.ElementTree as ET
+    xml_no_award = """<feed xmlns="http://www.w3.org/2005/Atom"
+          xmlns:cbc="urn:dgpe:names:draft:codice:schema:xsd:CommonBasicComponents-2"
+          xmlns:cac="urn:dgpe:names:draft:codice:schema:xsd:CommonAggregateComponents-2"
+          xmlns:cac_ext="urn:dgpe:names:draft:codice-place-ext:schema:xsd:CommonAggregateComponents-2"
+          xmlns:cbc_ext="urn:dgpe:names:draft:codice-place-ext:schema:xsd:CommonBasicComponents-2">
+      <entry>
+        <title>Contrato sin adjudicar</title>
+        <link href="https://example.com/123"/>
+        <updated>2025-03-15T10:00:00Z</updated>
+        <cac_ext:ContractFolderStatus>
+          <cbc:ContractFolderID>EXP-2025-002</cbc:ContractFolderID>
+          <cbc_ext:ContractFolderStatusCode>PUB</cbc_ext:ContractFolderStatusCode>
+          <cac:ProcurementProject>
+            <cbc:TypeCode>1</cbc:TypeCode>
+            <cac:BudgetAmount><cbc:TaxExclusiveAmount>50000.00</cbc:TaxExclusiveAmount></cac:BudgetAmount>
+          </cac:ProcurementProject>
+        </cac_ext:ContractFolderStatus>
+      </entry>
+    </feed>"""
+    from contratacion.contratos import NS as _NS
+    root = ET.fromstring(xml_no_award)
+    entry = root.find("atom:entry", _NS)
+    record = parse_entry(entry)
+    assert record is not None
+    assert record["contractor"] is None
+
+
 def test_contract_types_map_coverage():
     assert "1" in CONTRACT_TYPES
     assert "2" in CONTRACT_TYPES

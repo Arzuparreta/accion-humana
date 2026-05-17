@@ -17,18 +17,31 @@ function formatBig(n: number): string {
   return `${Math.round(n)} €`
 }
 
+function formatAmount(n: number): string {
+  return new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(n)
+}
+
 function SectionHeader({
   title,
+  subtitle,
   href,
   linkLabel = "Ver todo →",
 }: {
   title: string
+  subtitle?: string
   href: string
   linkLabel?: string
 }) {
   return (
-    <div className="mb-4 flex min-w-0 items-center justify-between gap-3">
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+    <div className="mb-4 flex min-w-0 items-start justify-between gap-3">
+      <div className="min-w-0">
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+        {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
+      </div>
       <ResponsiveLink
         href={href}
         className="shrink-0 text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
@@ -51,13 +64,19 @@ export default async function HomePage() {
     recentSessions,
     revolvingDoorCases,
     gobierno,
+    contractsTotalAmount,
+    featuredContract,
+    featuredContractIsRecent,
+    featuredSession,
+    featuredSubsidy,
+    featuredSubsidyIsRecent,
   } = await getHomeData()
 
   const stats = [
     { label: "Diputados activos", value: `${politicianCount}` },
-    { label: "Contratos públicos", value: contractCount.toLocaleString("es-ES") },
-    { label: "Subvenciones", value: subsidyCount.toLocaleString("es-ES") },
-    { label: "Votaciones", value: sessionCount.toLocaleString("es-ES") },
+    { label: "Licitaciones publicadas", value: contractCount.toLocaleString("es-ES") },
+    { label: "Subvenciones registradas", value: subsidyCount.toLocaleString("es-ES") },
+    { label: "Votaciones en el Congreso", value: sessionCount.toLocaleString("es-ES") },
     ...(currentBudget
       ? [{ label: `Presupuesto ${currentBudget.year}`, value: formatBig(currentBudget.total) }]
       : []),
@@ -67,7 +86,114 @@ export default async function HomePage() {
     <div className="space-y-10 sm:space-y-14">
       <LogoHero parties={parties ?? []} />
 
+      {/* Hero: dato de impacto */}
+      {contractsTotalAmount != null && contractsTotalAmount > 0 && (
+        <section className="rounded-2xl border border-border/60 bg-card/60 px-6 py-8 sm:px-10">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Importe total de contratos públicos adjudicados
+          </p>
+          <p className="mt-2 text-4xl font-extrabold tabular-nums tracking-tight sm:text-5xl">
+            {formatBig(contractsTotalAmount)}
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Fuente: Plataforma de Contratación del Sector Público (PCSP) · Ministerio de Hacienda
+          </p>
+          <ResponsiveLink
+            href="/contratos"
+            className="mt-4 inline-block text-sm font-medium underline underline-offset-4 hover:text-foreground"
+          >
+            Ver todos los contratos →
+          </ResponsiveLink>
+        </section>
+      )}
+
       <StatGrid items={stats} />
+
+      {/* Datos destacados: 3 tarjetas automáticas */}
+      {(featuredContract ?? featuredSession ?? featuredSubsidy) && (
+        <section>
+          <h2 className="mb-4 text-xl font-semibold tracking-tight">Datos destacados</h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {/* Contrato */}
+            {featuredContract && (
+              <EntityLink
+                kind="contract"
+                id={featuredContract.id as string}
+                className="flex flex-col gap-2 rounded-xl border border-border/60 bg-card/80 p-4 transition-colors hover:border-border hover:bg-card"
+              >
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Contrato · {featuredContractIsRecent ? "Último mes" : "Histórico"}
+                </p>
+                <p className="text-2xl font-bold tabular-nums">
+                  {featuredContract.amount != null ? formatAmount(featuredContract.amount as number) : "—"}
+                </p>
+                <p className="min-w-0 line-clamp-2 text-sm font-medium leading-snug">
+                  {featuredContract.title as string}
+                </p>
+                {featuredContract.awarding_body && (
+                  <p className="text-xs text-muted-foreground line-clamp-1">
+                    {featuredContract.awarding_body as string}
+                  </p>
+                )}
+              </EntityLink>
+            )}
+
+            {/* Votación más divergente */}
+            {featuredSession && (
+              <EntityLink
+                kind="voting-session"
+                id={featuredSession.id as string}
+                className="flex flex-col gap-2 rounded-xl border border-border/60 bg-card/80 p-4 transition-colors hover:border-border hover:bg-card"
+              >
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Votación · Mayor divergencia
+                </p>
+                <p className="text-2xl font-bold tabular-nums">
+                  {(featuredSession.divergence_count as number) ?? 0}{" "}
+                  <span className="text-base font-normal text-muted-foreground">divergencias</span>
+                </p>
+                <p className="min-w-0 line-clamp-2 text-sm font-medium leading-snug">
+                  {featuredSession.title as string}
+                </p>
+                {featuredSession.date && (
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(featuredSession.date as string).toLocaleDateString("es-ES", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+                )}
+              </EntityLink>
+            )}
+
+            {/* Subvención */}
+            {featuredSubsidy && (
+              <ResponsiveLink
+                href="/subvenciones"
+                className="flex flex-col gap-2 rounded-xl border border-border/60 bg-card/80 p-4 transition-colors hover:border-border hover:bg-card"
+              >
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Subvención · {featuredSubsidyIsRecent ? "Último mes" : "Histórico"}
+                </p>
+                <p className="text-2xl font-bold tabular-nums">
+                  {featuredSubsidy.importe != null ? formatAmount(featuredSubsidy.importe as number) : "—"}
+                </p>
+                <p className="min-w-0 line-clamp-2 text-sm font-medium leading-snug">
+                  {(featuredSubsidy.convocatoria as string | null) ??
+                    (featuredSubsidy.beneficiario as string | null) ??
+                    "Subvención pública"}
+                </p>
+                {featuredSubsidy.beneficiario && (
+                  <p className="text-xs text-muted-foreground line-clamp-1">
+                    {featuredSubsidy.beneficiario as string}
+                  </p>
+                )}
+              </ResponsiveLink>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Gobierno */}
       {gobierno.length > 0 && (
@@ -114,7 +240,11 @@ export default async function HomePage() {
       {/* Votaciones recientes */}
       {recentSessions.length > 0 && (
         <section>
-          <SectionHeader title="Votaciones recientes" href="/votaciones" />
+          <SectionHeader
+            title="Votaciones"
+            subtitle="Sesiones del Congreso con diputados que votaron diferente a su grupo"
+            href="/votaciones"
+          />
           <ul className="space-y-2">
             {recentSessions.map((s) => (
               <li key={s.id as string}>
@@ -144,7 +274,11 @@ export default async function HomePage() {
 
       {/* Diputados */}
       <section>
-        <SectionHeader title="Diputados" href="/diputados" />
+        <SectionHeader
+          title="Diputados"
+          subtitle="Las 350 personas que aprueban las leyes y el presupuesto del Estado"
+          href="/diputados"
+        />
         <div className="ui-grid-cards">
           {(politicians as unknown as PoliticianWithMemberships[]).map((p) => (
             <PoliticianCard key={p.id} politician={p} />
@@ -155,7 +289,11 @@ export default async function HomePage() {
       {/* Puertas giratorias */}
       {revolvingDoorCases.length > 0 && (
         <section>
-          <SectionHeader title="Puertas giratorias verificadas" href="/puertas-giratorias" />
+          <SectionHeader
+            title="Puertas giratorias verificadas"
+            subtitle="Cargos públicos que pasaron al sector privado tras dejar sus funciones"
+            href="/puertas-giratorias"
+          />
           <div className="grid gap-3 sm:grid-cols-2">
             {revolvingDoorCases.map((c) => (
               <ResponsiveLink

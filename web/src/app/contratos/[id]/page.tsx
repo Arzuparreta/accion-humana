@@ -2,7 +2,9 @@ import { notFound } from "next/navigation"
 import { EntityLink } from "@/components/domain/EntityLink"
 import { PageHeader } from "@/components/domain/PageHeader"
 import { InfoPanel } from "@/components/domain/InfoPanel"
+import { ShareButton } from "@/components/domain/ShareButton"
 import { getContractDetail } from "@/lib/data"
+import { BRAND_URL } from "@/lib/brand"
 
 export const revalidate = 3600
 
@@ -38,6 +40,19 @@ const ADMIN_LEVEL: Record<string, string> = {
   state: "Administración General del Estado",
   autonomic: "Comunidad Autónoma",
   municipal: "Entidad Local",
+}
+
+function buildShareText(contract: { title?: string | null; amount?: number | null; awarding_body?: string | null; contractor?: string | null }): string {
+  const amountStr = contract.amount != null
+    ? new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(contract.amount)
+    : null
+  const parts: string[] = []
+  if (contract.awarding_body) parts.push(contract.awarding_body)
+  if (amountStr) parts.push(`adjudicó ${amountStr}`)
+  if (contract.contractor) parts.push(`a ${contract.contractor}`)
+  return parts.length > 0
+    ? `${parts.join(" ")}. Fuente: España Transparente`
+    : `Contrato público. Fuente: España Transparente`
 }
 
 export default async function ContractDetailPage({ params }: PageProps) {
@@ -160,6 +175,11 @@ export default async function ContractDetailPage({ params }: PageProps) {
           </>
         )}
       </InfoPanel>
+
+      <ShareButton
+        text={buildShareText(contract)}
+        url={`${BRAND_URL}/contratos/${id}`}
+      />
     </div>
   )
 }

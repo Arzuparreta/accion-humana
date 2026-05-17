@@ -126,6 +126,14 @@ def parse_entry(entry: ET.Element) -> dict | None:
             except ValueError:
                 pass
 
+    # Winning contractor (only present in awarded contracts)
+    contractor = None
+    tender_result = status_root.find("cac:TenderResult", NS)
+    if tender_result is not None:
+        winning_party = tender_result.find("cac:WinningParty", NS)
+        if winning_party is not None:
+            contractor = _text(winning_party, "cac:PartyName/cbc:Name")
+
     return {
         "contract_folder_id": contract_folder_id,
         "title": title,
@@ -144,6 +152,7 @@ def parse_entry(entry: ET.Element) -> dict | None:
         ),
         "awarding_body_organization_id": None,
         "source_url": source_url,
+        "contractor": contractor,
     }
 
 
@@ -193,12 +202,12 @@ def upsert(conn, records: list[dict]) -> int:
               (contract_folder_id, title, awarding_body,
                awarding_body_normalized, amount, status, contract_type,
                cpv_code, region, date, ministry_normalized, administration_level,
-               awarding_body_organization_id, source_url)
+               awarding_body_organization_id, source_url, contractor)
             VALUES
               (%(contract_folder_id)s, %(title)s, %(awarding_body)s,
                %(awarding_body_normalized)s, %(amount)s, %(status)s, %(contract_type)s,
                %(cpv_code)s, %(region)s, %(date)s, %(ministry_normalized)s, %(administration_level)s,
-               %(awarding_body_organization_id)s, %(source_url)s)
+               %(awarding_body_organization_id)s, %(source_url)s, %(contractor)s)
             ON CONFLICT (contract_folder_id) DO UPDATE SET
               title = EXCLUDED.title,
               awarding_body = EXCLUDED.awarding_body,
@@ -215,7 +224,8 @@ def upsert(conn, records: list[dict]) -> int:
                 EXCLUDED.awarding_body_organization_id,
                 contracts.awarding_body_organization_id
               ),
-              source_url = EXCLUDED.source_url
+              source_url = EXCLUDED.source_url,
+              contractor = coalesce(EXCLUDED.contractor, contracts.contractor)
         """, rec)
         upserted += 1
     conn.commit()

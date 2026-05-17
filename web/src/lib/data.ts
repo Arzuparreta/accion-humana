@@ -57,6 +57,8 @@ export function parsePage(value: string | string[] | undefined) {
 export const getHomeData = unstable_cache(
   async () => {
     const currentBudgetYear = new Date().getFullYear()
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+
     const [
       politicians,
       politicianCount,
@@ -68,6 +70,10 @@ export const getHomeData = unstable_cache(
       sessionCount,
       revolvingDoorCases,
       gobierno,
+      contractsTotal,
+      featuredContractRecent,
+      featuredSession,
+      featuredSubsidyRecent,
     ] = await Promise.all([
       supabase
         .from("politicians")
@@ -101,6 +107,31 @@ export const getHomeData = unstable_cache(
         .select("id, person_name, organization_name, political_party, party_color, politician_id, position_type")
         .in("position_type", ["presidente_gobierno", "vicepresidente"])
         .limit(6),
+      // Hero: total importe de contratos adjudicados
+      supabase.from("contracts").select("amount.sum()").single(),
+      // Tarjeta contrato: mayor importe últimos 30 días
+      supabase
+        .from("contracts")
+        .select("id, title, amount, awarding_body, contractor, date")
+        .gte("date", thirtyDaysAgo)
+        .order("amount", { ascending: false, nullsFirst: false })
+        .limit(1)
+        .maybeSingle(),
+      // Tarjeta votación: sesión con más divergencias (sin ventana temporal)
+      supabase
+        .from("v_voting_session_summary")
+        .select("id, title, date, divergence_count")
+        .order("divergence_count", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      // Tarjeta subvención: mayor importe últimos 30 días
+      supabase
+        .from("subsidies")
+        .select("id, beneficiario, importe, fecha_concesion, convocatoria")
+        .gte("fecha_concesion", thirtyDaysAgo)
+        .order("importe", { ascending: false, nullsFirst: false })
+        .limit(1)
+        .maybeSingle(),
     ])
 
     const budgetTotal = (budgetSummaryRows.data ?? []).reduce(
@@ -111,6 +142,35 @@ export const getHomeData = unstable_cache(
       budgetSummaryRows.data?.[0]?.budget_type != null
         ? String(budgetSummaryRows.data[0].budget_type)
         : null
+
+    // Fallback a all-time si no hay datos recientes
+    const [featuredContractAllTime, featuredSubsidyAllTime] = await Promise.all([
+      featuredContractRecent.data
+        ? Promise.resolve({ data: null })
+        : supabase
+            .from("contracts")
+            .select("id, title, amount, awarding_body, contractor, date")
+            .order("amount", { ascending: false, nullsFirst: false })
+            .limit(1)
+            .maybeSingle(),
+      featuredSubsidyRecent.data
+        ? Promise.resolve({ data: null })
+        : supabase
+            .from("subsidies")
+            .select("id, beneficiario, importe, fecha_concesion, convocatoria")
+            .order("importe", { ascending: false, nullsFirst: false })
+            .limit(1)
+            .maybeSingle(),
+    ])
+
+    const featuredContract = featuredContractRecent.data ?? featuredContractAllTime.data
+    const featuredContractIsRecent = !!featuredContractRecent.data
+    const featuredSubsidy = featuredSubsidyRecent.data ?? featuredSubsidyAllTime.data
+    const featuredSubsidyIsRecent = !!featuredSubsidyRecent.data
+
+    // SUM(amount) result shape: { amount: { sum: number } }
+    const contractsTotalAmount: number | null =
+      (contractsTotal.data as unknown as { amount: { sum: number } } | null)?.amount?.sum ?? null
 
     return {
       politicians: politicians.data ?? [],
@@ -130,6 +190,12 @@ export const getHomeData = unstable_cache(
       recentSessions: recentSessions.data ?? [],
       revolvingDoorCases: revolvingDoorCases.data ?? [],
       gobierno: gobierno.data ?? [],
+      contractsTotalAmount,
+      featuredContract,
+      featuredContractIsRecent,
+      featuredSession: featuredSession.data ?? null,
+      featuredSubsidy,
+      featuredSubsidyIsRecent,
     }
   },
   ["home-data", PHOTOS_CACHE_VERSION],
