@@ -57,13 +57,23 @@ export default async function VotacionesPage({ searchParams }: PageProps) {
             ? new Date(s.date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })
             : ""
           const divCount = s.divergence_count ?? 0
+          const titleParts = s.title.split(/\.\s+-\s+/, 2)
+          const tipo = titleParts.length === 2 ? titleParts[0].trim() : null
+          const descripcion = titleParts.length === 2 ? titleParts[1].trim() : s.title
 
           return (
             <ResponsiveLink key={s.id} href={`/votaciones/${s.id}`}>
               <Card>
                 <CardContent className="flex items-start gap-3 py-4 sm:gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="text-base font-medium leading-6 text-balance">{s.title}</div>
+                    {tipo ? (
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        {tipo}
+                      </p>
+                    ) : null}
+                    <div className={`${tipo ? "mt-1.5" : ""} text-base font-medium leading-6 text-balance`}>
+                      {descripcion}
+                    </div>
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
                         Sesión {s.session_number} · {dateStr}
