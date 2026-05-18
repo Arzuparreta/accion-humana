@@ -41,7 +41,7 @@ export default async function VotacionesPage({ searchParams }: PageProps) {
         actions={
           <ResponsiveLink
             href="/distorsion"
-            className="shrink-0 text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+            className="inline-flex min-h-11 shrink-0 items-center text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
           >
             Ver divergencias de voto →
           </ResponsiveLink>

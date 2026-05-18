@@ -45,7 +45,7 @@ export function AnchorCard({
       {href ? (
         <ResponsiveLink
           href={href}
-          className="mt-4 inline-block text-sm font-medium underline underline-offset-4 hover:text-foreground"
+          className="mt-3 inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4 hover:text-foreground"
         >
           {linkLabel}
         </ResponsiveLink>
